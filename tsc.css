@@ -1,0 +1,80 @@
+body
+{
+background-color: #000000;
+color:#ffffff;
+font-family: OCR A Extended, Fixedsys, MONOSPACE;
+font-size: 16;
+}
+a
+{
+color: #ffffff;
+font-weight:bold;
+text-decoration: none;
+}
+a:hover
+{
+text-decoration: underline;
+}
+a.tsc
+{
+color:#D4B36D;
+text-decoration: none;
+}
+a.tsc:hover
+{
+color:#f4d38D;
+text-decoration: none;
+}
+a.downers
+{
+color:#999999;
+text-decoration: none;
+}
+a.downers:hover
+{
+color:#bbbbbb;
+text-decoration: none;
+}
+input
+{
+font-family: OCR A Extended, Fixsys, MONOSPACE;
+background-color: #222222;
+color: #ffffff;
+border:1;
+}
+select
+{
+font-family: OCR A Extended, Fixsys, MONOSPACE;
+background-color: #222222;
+color: #ffffff;
+border:0;
+}
+input.free
+{
+font-family: OCR A Extended, Fixsys, MONOSPACE;
+background-color: #555555;
+color: #ffffff;
+border:0;
+}
+select.free
+{
+font-family: OCR A Extended, Fixsys, MONOSPACE;
+background-color: #555555;
+color: #ffffff;
+border:0;
+}
+td
+{
+font-size: 14;
+}
+th
+{
+font-size: 10;
+}
+textarea
+{
+font-family: OCR A Extended, Fixsys, MONOSPACE;
+background-color: #666666;
+color: #ffffff;
+border:0;
+}
