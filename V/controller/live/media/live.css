@@ -1,0 +1,61 @@
+div.messenger {
+    background-color: #555555;
+    width: 90%;
+    margin: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    box-shadow:inset 0px 0px 4px #222222;
+}
+div.messenger div.contacts {
+    width: 49%;
+    display: inline-block;
+}
+div.messenger ul#live_contacts > li:not([id=live_contact_niemand]) {
+    cursor: pointer;
+}
+div.messenger ul#live_contacts > li > div {
+    display: inline-block;
+    vertical-align: middle;
+}
+div.messenger div#live_contact_container {
+    width: 49%;
+    display: block;
+    float: left;
+}
+div.messenger div#live_incoming {
+    width: 49%;
+    display: block;
+    float: right;
+}
+
+div.messenger div#live_incoming + div {
+    clear: both;
+}
+
+div#live_conversations {
+    max-height: 250px;
+    overflow: hidden;
+}
+div#live_conversations > div {
+    opacity: 0.8;
+}
+div#live_conversations > div:hover {
+    opacity: 1;
+}
+
+div.messenger textarea#live_message_content {
+    display: block;
+    width: 100%;
+    min-height: 30px;
+}
+
+div.live_incoming_message_content, div.live_incoming_message_from_force {
+    display: none;
+}
+
+ul#live_incoming_list > li {
+    cursor: pointer;
+}
