@@ -14,7 +14,7 @@ if (!file_exists(dirname(__file__)."/config.php")) {
 <link rel="stylesheet" href="tsc.css" type="text/css">
 <link rel="SHORTCUT ICON" href="V/media/images/favicon.ico">
 </head>
-<body onload="document.forms.logindata.login.focus()" style="background: black url(bilder/diffus.svg) no-repeat;"><!- Breite=900 ->
+<body onload="document.forms.logindata.login.focus()" style="background: black url(bilder/Gossamer_Fractal_Texture_Stock_by_shd_stock.jpg) no-repeat;"><!- Breite=900 ->
 <table width=900>
 <tr height=600><td width=70></td><td valign=top><center>
 <br>
