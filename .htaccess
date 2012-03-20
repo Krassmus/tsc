@@ -1,14 +1,5 @@
-DirectoryIndex index.php index.html index.htm
+DirectoryIndex index.php
 
-php_value display_errors 2
-php_value error_reporting 6135
 php_flag short_open_tag On
-php_flag register_globals Off
-php_value upload_max_filesize 32M
-php_value post_max_size 32M
-php_value memory_limit 32M
-php_value max_execution_time 300
-php_flag magic_quotes_gpc Off
-php_flag magic_quotes_runtime = Off
 
     
