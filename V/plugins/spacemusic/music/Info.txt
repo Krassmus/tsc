@@ -1,0 +1,8 @@
+Der mitgelieferte Soundtrack in diesem Ordner steht unter Creative Commons Lizenz.
+
+Man kann eigene Lieder hinzufügen oder alte entfernen, selbst wenn das Modul im Betrieb ist. Für das Internet eignen sich nur .ogg Dateien, weil es das einzige Format ist, das selbst unter Linux out of the box abgespielt werden kann.
+
+1.) Gewünschte Dateien von mp3 in ogg umwandeln.
+2.) In diesen Ordner schieben.
+
+Der Rest geschieht automatisch.
