@@ -158,6 +158,11 @@ div.header h2 {
     display: inline-block;
     vertical-align: middle;
 }
+div.header.alert h2 {
+    color: #fffe7e !important; /* muss sich gegen die Angabe vom Header durchsetzen */
+    text-decoration: underline;
+}
+
 div.header .space {
     display: inline-block;
     height: 56px;

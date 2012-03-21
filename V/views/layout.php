@@ -71,7 +71,7 @@
     <div id="main_frame" style="display: none;">
         <div id="headline">
             <? foreach ($modules as $mod) : ?>
-            <div class="header" id="hheader_<?= get_class($mod) ?>" onClick="return TSC.link.show('<?= get_class($mod) ?>')">
+            <div class="header" id="header_<?= get_class($mod) ?>" onClick="return TSC.link.show('<?= get_class($mod) ?>')">
                 <? $title = $mod->getTitle() ?>
                 <div class="lightable">
                     <span class="space"></span>
