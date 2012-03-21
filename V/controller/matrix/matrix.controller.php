@@ -32,6 +32,10 @@ class matrix extends ModuleGroupController {
         return "pages";
     }
     
+    public function getTitle() {
+        return "Matrix";
+    }
+
     protected function framedActions() {
         return array("pages");
     }

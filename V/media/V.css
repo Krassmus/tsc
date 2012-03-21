@@ -4,7 +4,6 @@ body {
     background-color: black;
     background-position: 0px 0px;
     background-repeat: no-repeat;
-    font-family:  OCR A Extended, Andale Mono, Lucida Sans Typewriter, Silom, Fixedsys, MONOSPACE;
     font-size: 12px;
 }
 a {
@@ -67,7 +66,6 @@ textarea {
 }
 h1, h2, h3 {
     font-weight: normal;
-    font-family: Aero, Arial;
     text-shadow: #222222 0px 0px 3px;
 }
 h1 {
@@ -145,19 +143,32 @@ div.header {
     text-align: center;
 }
 div.header > div {
-	cursor: pointer;
-	height: 56px;
-	width: 100%;
-	margin: 2px;
-	background-color: #333333;
+    cursor: pointer;
+    height: 56px;
+    width: 100%;
+    margin: 2px;
+    background-color: #333333;
     background-image: url(images/ui-bg_dots-small.png);
     background-repeat: repeat;
     border: 1px solid #333333;
+    white-space: nowrap;
 }
 div.header h2 {
-	margin: 0px;
+    margin: 0px;
+    display: inline-block;
+    vertical-align: middle;
+}
+div.header .space {
+    display: inline-block;
+    height: 56px;
+    min-height: 56px;
+    width: 1px;
+    min-width: 1px;
+    vertical-align: middle;
 }
 div.header.bridge {
+    margin-bottom: 1px;
+    text-align: left;
 }
 div.header.bridge ul {
     display: table-cell;
@@ -176,8 +187,8 @@ div.content {
     border: 1px solid #333333;
     padding-left: 70px;
     padding-right: 70px;
-	max-width: 100%;
-	overflow: hidden;
+    max-width: 100%;
+    overflow: hidden;
 }
 #bodies > div {
     display: none;

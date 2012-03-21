@@ -19,6 +19,10 @@ class live extends ModuleController {
         return $nav;
     }
     
+    public function getTitle() {
+        return "Live";
+    }
+
     public function defaultAction() {
         return "messenger";
     }

@@ -27,6 +27,10 @@ class news extends ModuleController {
     public function defaultAction() {
         return "mails";
     }
+    
+    public function getTitle() {
+        return "News";
+    }
 
     public function sendData() {
         global $login, $force, $gruppe;

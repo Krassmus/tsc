@@ -23,6 +23,10 @@ class bureau extends ModuleGroupController {
         return $nav;
     }
     
+    public function getTitle() {
+        return "Büro";
+    }
+
     protected function framedActions() {
         return array("admin");
     }

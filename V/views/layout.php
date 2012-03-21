@@ -15,6 +15,20 @@
     <link rel="stylesheet" href="media/V.css" type="text/css">
 <?= FileInclude::getHeaderFiles() ?>
     <style>
+        <? if (!$stil['font']) : ?>
+        @font-face {
+            font-family: OCR A Extended;
+            local: OCR A Extended;
+            src: url(./media/ocraext.ttf);  
+        }
+        <? endif ?>
+        <? if (!$stil['headerfont']) : ?>
+        @font-face {
+            font-family: Aero;
+            local: Aero;
+            src: url(./media/aeaswfte.ttf);  
+        }
+        <? endif ?>
         body {
             background-image: url('<?= $stil['backgroundimage'] > 0 ? "file.php?module=matrix&type=MatrixImage&file_id=".$stil['backgroundimage'] : "media/images/Homecoming_by_keepwalking07.jpg" ?>');
         }
@@ -26,7 +40,7 @@
             width: <?= floor($width/(count($modules)))*count($modules) ?>px;
         }
         div.header {
-			width: <?= floor($width/(count($modules))) ?>px;
+            width: <?= floor($width/(count($modules))) ?>px;
             max-width: <?= floor($width/(count($modules))) ?>px;
         }
         h1, h2, h3, h4, h5, h6 {
@@ -58,10 +72,12 @@
         <div id="headline">
             <? foreach ($modules as $mod) : ?>
             <div class="header" id="hheader_<?= get_class($mod) ?>" onClick="return TSC.link.show('<?= get_class($mod) ?>')">
-				<? $title = $mod->getTitle() ?>
-					<div class="lightable">
-					<h2><?= escape($title['title']) ?></h2>
-				</div>
+                <? $title = $mod->getTitle() ?>
+                <div class="lightable">
+                    <span class="space"></span>
+                    <h2><?= escape($title) ?></h2>
+                    <span class="space"></span>
+                </div>
             </div>
             <? endforeach ?>
         </div><!-- headline Ende -->
@@ -70,15 +86,15 @@
         <? foreach ($modules as $mod) : ?>
         <div id="body_<?= get_class($mod)?>">
             <div class="header bridge" style="margin-left: <?= floor($width/(count($modules)))*$count ?>px">
-				<div class="lightable">
-					<ul>
-					<? foreach ($mod->getNavigation() as $action => $link) : ?>
-						<li><a href="" onClick="TSC.link.show('<?= get_class($mod) ?>', '<?= $action ?>'); return false;">
-							<?= htmlentities($link['title']) ?>
-						</a></li>
-					<? endforeach ?>
-					</ul>
-				</div>
+                <div class="lightable">
+                    <ul>
+                    <? foreach ($mod->getNavigation() as $action => $link) : ?>
+                        <li><a href="" onClick="TSC.link.show('<?= get_class($mod) ?>', '<?= $action ?>'); return false;">
+                                <?= htmlentities($link['title']) ?>
+                        </a></li>
+                    <? endforeach ?>
+                    </ul>
+                </div>
             </div>
             <? $first = true ?>
             <? foreach ($mod->getNavigation() as $action => $link) : ?>

@@ -24,23 +24,7 @@ class ModuleController extends Module {
      * gets the title-graphic - this is called repeatedly
      */
     public function getTitle() {
-        global $stil;
-        if ($this->isSomethingNew()) {
-            $url = get_class($this)."/media/title_yellow.png";
-        } else {
-            $url = get_class($this) .
-                           "/media" .
-                           "/title_".($stil['headercolor'] === "1" ? "blue" : ($stil['headercolor'] === "2" ? "green" : "orange")).".png";
-        }
-        if (file_exists(dirname(__file__)."/../controller/".$url)) {
-            $url = "controller/".$url;
-        } else {
-            $url = "plugins/".$url;
-        }
-        return array(
-            'image_url' => $url,
-			'title' => get_class($this)
-        );
+        return get_class($this);
     }
     
     
