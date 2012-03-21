@@ -19,12 +19,12 @@
         <?= date("c", $row['date']) ?>
     </td>
 	<td>
-		<? if ($row['topicture']) : ?>
-		<div style="background-image: url(file.php?module=matrix&type=MatrixImage&file_id=<?= $row['topicture'] ?>);" class="logo medium">
-		<? endif ?>
-        <? print Forces::id2name($row['toforce']) ?>
-		<? if ($row['topicture']) : ?>
-		</div>
-		<? endif ?>
-	</td>
+        <? $toforces = explode('_', $row['toforces']) ?>
+        <div style="background-image: <?= (count($toforces) < 2 && $row['topicture'] > 0) ? "url('file.php?module=matrix&type=MatrixImage&file_id=".$row['topicture']."');" : "linear-gradient(right bottom, #444444, #111111); background-image: -o-linear-gradient(right bottom, #444444, #111111); background-image: -moz-linear-gradient(right bottom, #444444, #111111); background-image: -webkit-linear-gradient(right bottom, #444444, #111111); background-image: -ms-linear-gradient(right bottom, #444444, #111111);" ?>" class="logo medium">
+        <? foreach ($toforces as $key => $toforce) : ?>
+            <?= $key > 0 ? "<br>" : "" ?>
+            <?= Forces::id2name($toforce) ?>
+        <? endforeach ?>
+        </div>
+        </td>
 </tr>

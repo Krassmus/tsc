@@ -1,12 +1,12 @@
 <tr id="news_inbox_<?= $id ?>" class="lightable<?= $row['yet_read'] ? "" : " neu" ?><?= $row['pdf'] ? " pdf" : "" ?>" timestamp="<?= $row['date'] ?>">
     <td>
     	<? if ($row['frompicture']) : ?>
-		<div style="background-image: url(file.php?module=matrix&type=MatrixImage&file_id=<?= $row['frompicture'] ?>);" class="logo medium">
-		<? endif ?>
+        <div style="background-image: url(file.php?module=matrix&type=MatrixImage&file_id=<?= $row['frompicture'] ?>);" class="logo medium">
+        <? endif ?>
         <? print escape(Forces::id2name($row[1])) ?>
-		<? if ($row['frompicture']) : ?>
-		</div>
-		<? endif ?>
+        <? if ($row['frompicture']) : ?>
+        </div>
+        <? endif ?>
 	</td>
     <td>
         <?

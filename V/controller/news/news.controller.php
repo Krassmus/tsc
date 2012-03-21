@@ -263,7 +263,7 @@ class news extends ModuleController {
             );
         }
         $outbox = $db->query(
-            "SELECT m.id, m.fromforce, m.date, m.content, m.frompicture, m.pdf, r.* " .
+            "SELECT m.id, m.fromforce, m.date, m.content, m.frompicture, m.pdf, r.*, GROUP_CONCAT(r.toforce SEPARATOR '_') AS toforces, GROUP_CONCAT(r.topicture SEPARATOR '_') AS topictures " .
             "FROM messages AS m " .
                 "INNER JOIN relate_sp_f AS f ON (m.fromforce = f.force_id) " .
                 "INNER JOIN relate_f_gr AS g ON (f.force_id = g.force_id) " .
