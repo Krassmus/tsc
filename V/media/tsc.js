@@ -145,16 +145,15 @@ TSC.JSUpdater = {
             if (typeof TSC[modulename] !== "undefined" && typeof TSC[modulename].update === "function") {
                 TSC[modulename].update(infos.data);
             }
-            if (typeof infos.title !== "undefined" && typeof infos.title.image_url !== "undefined") {
-                $("#header_" + modulename).css("background-image", "url(" + infos.title.image_url + ")");
-            }
             if (infos.data.alert) {
+                $("#header_" + modulename).addClass("alert");
                 somethingnew = true;
+            } else {
+                $("#header_" + modulename).removeClass("alert");
             }
         });
         window.document.title = somethingnew ? "TSC (!)" : "TSC";
     },
-
     /**
      * function to generate a queue of repeated calls
      * @call_id : id of the call-queue
