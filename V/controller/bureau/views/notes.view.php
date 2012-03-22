@@ -19,6 +19,11 @@ form[name=notizzettel] textarea {
 
 <h2>Dokumente</h2>
 <a href="../Einfuehrung_in_das_Webmodul.pdf" target="_blank">Hilfe zur Bedienung des Spielermoduls</a>
+
+<br><br>
+
+<h2>Home sweet home</h2>
+<a href="../index.php">Das Modul verlassen</a>
 <br>
 <br>
 <br>
