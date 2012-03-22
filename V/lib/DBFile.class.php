@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__file__)."/vendor/qqUpload.php";
+require_once dirname(__file__)."/Cache.class.php";
 
 class DBFile {
     
@@ -53,9 +54,11 @@ class DBFile {
     public function deliver() {
         if ($this->readable()) {
             $db = DBManager::get();
-            $file_data = $db->query("SELECT * " .
-                               "FROM `".$this->table."` " .
-                               "WHERE ".$this->id_field." = ".$db->quote($this->id))->fetch();
+            $file_data = Cache::getCachedFetch(
+                "SELECT * FROM `".$this->table."` WHERE ".$this->id_field." = :id ", 
+                array('id' => $this->id), 
+                5
+            );
             
             if ($this->mime_type_field === null) {
                 header("Content-type: ".$this->mime_type_part1);

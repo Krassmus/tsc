@@ -18,7 +18,8 @@ class MatrixImage extends DBFile {
     public function readable() {
         global $login;
         $db = DBManager::get();
-        $hasrightstoread = $db->query("SELECT 1 " .
+        $hasrightstoread = $db->query(
+            "SELECT 1 " .
             "FROM bilder " .
                 "INNER JOIN relate_f_gr AS g ON (bilder.matrix = g.gruppe_id) " .
                 "INNER JOIN gruppe ON (gruppe.id = g.gruppe_id) " .
@@ -26,8 +27,8 @@ class MatrixImage extends DBFile {
             "WHERE (f.spieler = ".$db->quote($login)." " .
                     "OR gruppe.freigegeben = '1') " .
                 "AND bilder.id = ".$db->quote($this->id)." " .
-            "ORDER BY bilder.id DESC "
-        )->fetch(PDO::FETCH_COLUMN, 0);
+            "ORDER BY bilder.id DESC " .
+        "")->fetch(PDO::FETCH_COLUMN, 0);
         return $hasrightstoread ? true : false;
     }
     
@@ -54,10 +55,10 @@ class MatrixImage extends DBFile {
     }
     
     public function getSize() {
-		$db = DBManager::get();
-		return $db->query(
-			"SELECT width, height FROM bilder WHERE id = ".$db->quote($thid->id)." " .
-		"")->fetchAll();
+        $db = DBManager::get();
+        return $db->query(
+                "SELECT width, height FROM bilder WHERE id = ".$db->quote($thid->id)." " .
+        "")->fetchAll();
     }
     
     
