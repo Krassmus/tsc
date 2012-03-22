@@ -1,4 +1,4 @@
-<tr id="news_inbox_<?= $id ?>" class="lightable<?= $row['yet_read'] ? "" : " neu" ?><?= $row['pdf'] ? " pdf" : "" ?>" timestamp="<?= $row['date'] ?>">
+<tr id="news_inbox_<?= $id ?>" class="lightable<?= $row['yet_read'] ? "" : " neu" ?><?= $row['pdf'] ? " pdf" : "" ?><?= $row['flag'] ? " marked" : "" ?>" timestamp="<?= $row['date'] ?>">
     <td>
     	<? if ($row['frompicture']) : ?>
         <div style="background-image: url(file.php?module=matrix&type=MatrixImage&file_id=<?= $row['frompicture'] ?>);" class="logo medium">
@@ -9,6 +9,7 @@
         <? endif ?>
 	</td>
     <td>
+        <div class="flag" title="markiert">&nbsp;&nbsp;</div>
         <?
         if ($row['pdf']) {
             $datei = substr(strstr($row[3], "_"), 1);

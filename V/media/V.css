@@ -292,21 +292,32 @@ table#news_eingang, table#news_ausgang {
     width: 100%;
 }
 table#news_eingang > tbody > tr > td, table#news_ausgang > tbody > tr > td {
-	cursor: pointer;
+    cursor: pointer;
 }
 table#news_eingang > tbody > tr.neu td{
-	color: #ffff55;
+    color: #ffff55;
 }
 
 #news_singlemessage {
-	margin-top: 20px;
-	margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#news_eingang .flag {
+    display: none;
+}
+#news_eingang .marked .flag {
+    display: block;
+    float: left;
+    margin-right: 5px;
+    background: url(images/circle.png) no-repeat center center;
+    background-size: 100%;
+    vertical-align: text-top;
 }
 
 img.artikel_avatar {
-	display: block;
-	float: right;
-	margin: 3px;
+    display: block;
+    float: right;
+    margin: 3px;
 }
 
 #matrix_suchmaske_body {

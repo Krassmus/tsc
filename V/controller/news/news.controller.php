@@ -233,7 +233,7 @@ class news extends ModuleController {
         $jahresauswahl = $_REQUEST['year'];
         $data = array('inbox' => array(), 'outbox' => array());
         $inbox = $db->query(
-            "SELECT DISTINCT m.id, m.fromforce, m.date, m.content, r.toforce, r.yet_read, m.frompicture, r.topicture, m.pdf " .
+            "SELECT DISTINCT m.id, m.fromforce, m.date, m.content, r.toforce, r.yet_read, r.flag, m.frompicture, r.topicture, m.pdf " .
             "FROM messages AS m " .
                 "INNER JOIN relate_messages AS r ON (r.ms_id = m.id) " .
                 "INNER JOIN relate_sp_f AS f ON (r.toforce = f.force_id) " .
@@ -298,7 +298,7 @@ class news extends ModuleController {
         global $login, $force;
         $db = DBManager::get();
         $mail = $db->query(
-            "SELECT m.id, m.fromforce, m.date, m.content, r.toforce, r.yet_read, m.frompicture, r.topicture, m.pdf " .
+            "SELECT m.id, m.fromforce, m.date, m.content, r.toforce, r.yet_read, r.flag, m.frompicture, r.topicture, m.pdf, IF(f.spieler = ".$db->quote($login).", 1, 0) AS my_message " .
             "FROM messages AS m " .
                 "INNER JOIN relate_messages AS r ON (r.ms_id = m.id) " .
                 "INNER JOIN relate_sp_f AS f ON (r.toforce = f.force_id) " .
@@ -327,6 +327,26 @@ class news extends ModuleController {
                     "AND toforce IN (" .
                         "SELECT relate_sp_f.force_id FROM relate_sp_f WHERE relate_sp_f.spieler = ".$db->quote($login)." " .
                     ") " .
+            "");
+        }
+    }
+    
+    public function action_set_flag() {
+        global $login;
+        $db = DBManager::get();
+        $messages = $db->query(
+            "SELECT r.toforce " .
+            "FROM relate_messages AS r " .
+                "INNER JOIN relate_sp_f AS f ON (r.toforce = f.force_id) " .
+            "WHERE f.spieler = ".$db->quote($login)." " .
+                "AND r.ms_id = ".$db->quote($_REQUEST['message_id'])." " .
+        "")->fetchAll(PDO::FETCH_COLUMN, 0);
+        foreach ($messages as $message_receiver) {
+            $db->exec(
+                "UPDATE relate_messages " .
+                "SET flag = ".$db->quote((int) $_REQUEST['flag'])." " .
+                "WHERE ms_id = ".$db->quote($_REQUEST['message_id'])." " .
+                    "AND toforce = ".$db->quote($message_receiver)." " .
             "");
         }
     }
