@@ -233,13 +233,59 @@ div.content {
  }
  
  
- div#matrix_footer {
-	clear: both;
+
+
+div#news_selector div {
+    width: 24%;
+    text-align: center;
+    display: inline-block;
+}
+table#news_eingang, table#news_ausgang {
+    width: 100%;
+}
+table#news_eingang > tbody > tr > td, table#news_ausgang > tbody > tr > td, table#news_search_table > tbody > tr[id] > td {
+    cursor: pointer;
+}
+table#news_eingang > tbody > tr.neu td{
+    color: #ffff55;
+}
+
+#news_singlemessage {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#news_eingang .flag {
+    display: none;
+}
+#news_eingang .marked .flag {
+    display: block;
+    float: left;
+    margin-right: 5px;
+    background: url(images/circle.png) no-repeat center center;
+    background-size: 100%;
+    vertical-align: text-top;
+}
+#news_search_form {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin: 10px;
+}
+
+img.artikel_avatar {
+    display: block;
+    float: right;
+    margin: 3px;
+}
+
+
+div#matrix_footer {
+    clear: both;
     margin-top: 50px;
     margin-bottom: 30px;
     width: 100%;
     text-align: center;
- }
+}
  
 div#matrix_image_container {
     margin: 10px;
@@ -249,10 +295,10 @@ div#matrix_image_container {
 }
 
 #matrix_suchmaske_buchstaben {
-	cursor: pointer;
+    cursor: pointer;
 }
 
- a.matrix_image {
+a.matrix_image {
     display: inline-block;
     min-width: 100px;
     min-height: 100px;
@@ -282,44 +328,6 @@ div.matrix_uploader {
 div.matrix_uploader:hover {
     background-color: #222222;
 }
-
-div#news_selector div {
-    width: 24%;
-    text-align: center;
-    display: inline-block;
-}
-table#news_eingang, table#news_ausgang {
-    width: 100%;
-}
-table#news_eingang > tbody > tr > td, table#news_ausgang > tbody > tr > td {
-    cursor: pointer;
-}
-table#news_eingang > tbody > tr.neu td{
-    color: #ffff55;
-}
-
-#news_singlemessage {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-#news_eingang .flag {
-    display: none;
-}
-#news_eingang .marked .flag {
-    display: block;
-    float: left;
-    margin-right: 5px;
-    background: url(images/circle.png) no-repeat center center;
-    background-size: 100%;
-    vertical-align: text-top;
-}
-
-img.artikel_avatar {
-    display: block;
-    float: right;
-    margin: 3px;
-}
-
 #matrix_suchmaske_body {
     display: table-row;
     width: 100%;

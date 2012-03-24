@@ -21,6 +21,6 @@
         ?>
     </td>
     <td>
-        <?= date("c", $row['date']) ?>
+        <?= date("Y:n:j:G:i:s", $row['date']) ?>
     </td>
 </tr>

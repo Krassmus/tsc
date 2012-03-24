@@ -1,6 +1,6 @@
 <div id="news_selector">
     <div>
-        <input type="button" value="Suchen">
+        <input type="button" value="Suchen" onClick="TSC.news.showSearch();">
     </div>
 	<div>
         <input type="button" value="Eingang" onClick="TSC.news.showInbox();">
@@ -27,7 +27,25 @@
     </div>
 </div>
 
-
+<div id="news_search" style="display: none;">
+    <div id="news_search_form">
+        <input type="text" id="news_search_text">
+        <input type="button" value="suchen" onClick="TSC.news.searchFor();">
+    </div>
+    <table id="news_search_table" class="fine_table">
+        <thead>
+            <tr>
+                <th>Von</th>
+                <th>Nachricht</th>
+                <th>Datum</th>
+                <th>Nach</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+    
 <table id="news_eingang" class="fine_table">
     <thead>
         <th>Von</th>

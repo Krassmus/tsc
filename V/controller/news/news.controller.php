@@ -202,13 +202,13 @@ class news extends ModuleController {
         $maximum = 0;
         $jahresauswahl = $_REQUEST['jahresauswahl'] ? $_REQUEST['jahresauswahl'] : 0;
         $group_year = $db->query(
-                "SELECT year.gruppe, MAX(year.zeit) as zeit, MAX(year.jahreszahl) as jahreszahl, MIN(year.jahreszahl) AS startjahr " .
-                "FROM year " .
-                "INNER JOIN relate_f_gr ON (relate_f_gr.gruppe_id = year.gruppe) " .
-                    "INNER JOIN relate_sp_f ON (relate_sp_f.force_id = relate_f_gr.force_id) " .
-                "WHERE relate_sp_f.spieler = ".$db->quote($login)." " .
-                "GROUP BY year.gruppe " .
-                "ORDER BY jahreszahl DESC" .
+            "SELECT year.gruppe, MAX(year.zeit) as zeit, MAX(year.jahreszahl) as jahreszahl, MIN(year.jahreszahl) AS startjahr " .
+            "FROM year " .
+            "INNER JOIN relate_f_gr ON (relate_f_gr.gruppe_id = year.gruppe) " .
+                "INNER JOIN relate_sp_f ON (relate_sp_f.force_id = relate_f_gr.force_id) " .
+            "WHERE relate_sp_f.spieler = ".$db->quote($login)." " .
+            "GROUP BY year.gruppe " .
+            "ORDER BY jahreszahl DESC " .
         "")->fetchAll();
         $maximum = $group_year[0]['jahreszahl'];
         $minimum = $maximum;
@@ -329,6 +329,57 @@ class news extends ModuleController {
                     ") " .
             "");
         }
+    }
+    
+    public function action_search_mails() {
+        global $login, $force;
+        $db = DBManager::get();
+        $data = array('results' => array());
+        if (strlen($_REQUEST['search']) > 3) {
+            $forces = $db->query(
+                "SELECT f.force_id " .
+                "FROM relate_sp_f AS f " .
+                    "LEFT JOIN relate_f_gr AS g ON (g.force_id = f.force_id) " .
+                    "LEFT JOIN relate_master_gr AS m ON (m.gruppe_id = g.gruppe_id) " .
+                "WHERE f.spieler = ".$db->quote($login)." OR m.spieler = ".$db->quote($login)." ".
+            "")->fetchAll(PDO::FETCH_COLUMN, 0);
+            $results = $db->query(
+                "SELECT DISTINCT m.id, m.fromforce, m.date, m.content, r.toforce, r.yet_read, r.flag, m.frompicture, r.topicture, m.pdf " .
+                "FROM messages AS m " .
+                    "INNER JOIN relate_messages AS r ON (r.ms_id = m.id) " .
+                "WHERE " .
+                    "MATCH (m.content) AGAINST (".$db->quote($_REQUEST['search'])." IN BOOLEAN MODE) " .
+                    "AND (m.fromforce IN ('".implode("','", $forces)."') " .
+                        "OR r.toforce IN ('".implode("','", $forces)."') ".
+                    ") " .
+                "ORDER BY m.date ASC " .
+            "")->fetchAll();
+            
+            $years = $db->query(
+                "SELECT year.* " .
+                "FROM year " .
+                "INNER JOIN relate_f_gr ON (relate_f_gr.gruppe_id = year.gruppe) " .
+                    "INNER JOIN relate_sp_f ON (relate_sp_f.force_id = relate_f_gr.force_id) " .
+                "WHERE relate_sp_f.spieler = ".$db->quote($login)." " .
+                "GROUP BY year.zeit " .
+                "ORDER BY zeit DESC " .
+            "")->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach ($results as $news_row) {
+                $data['results'][] = array(
+                    'id' => $news_row['id'],
+                    'date' => $news_row['date'],
+                    'html' => Template::summon(dirname(__file__)."/views/search_overview.php")
+                                    ->with("id", $news_row['id'])
+                                    ->with("row", $news_row)
+                                    ->with("force", $force)
+                                    ->with("years", $years)
+                                    ->render()
+                );
+            }
+        }
+        
+        print json_encode($data);
     }
     
     public function action_set_flag() {
