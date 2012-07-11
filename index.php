@@ -17,7 +17,7 @@ if (!file_exists(dirname(__file__)."/config.php")) {
 <script type="text/javascript" src="V/media/jquery-ui-1.8.5.custom.min.js"></script>
 <style>
 #loginwindow {
-	opacity: .7; filter: alpha(opacity=70); 
+	opacity: .8; filter: alpha(opacity=80); 
 	background-image: -moz-linear-gradient(top, #000000 0%, #222222 100%);
 	padding: 12px;
 	border-radius: 8px;
