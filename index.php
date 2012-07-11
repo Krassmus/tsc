@@ -13,48 +13,47 @@ if (!file_exists(dirname(__file__)."/config.php")) {
 <title>TacticalSpaceCommunity</title>
 <link rel="stylesheet" href="tsc.css" type="text/css">
 <link rel="SHORTCUT ICON" href="V/media/images/favicon.ico">
+<script type="text/javascript" src="V/media/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="V/media/jquery-ui-1.8.5.custom.min.js"></script>
+<style>
+#loginwindow {
+	opacity: .7; filter: alpha(opacity=70); 
+	background-image: -moz-linear-gradient(top, #000000 0%, #222222 100%);
+	padding: 12px;
+	border-radius: 8px;
+	box-shadow: 0px 0px 50px #ffaaaa;
+	position: absolute; 
+	top: 300px; 
+	left: 330px;
+	text-align: center;
+}
+#loginwindow input {
+	background-color: #050505;
+	border: 1px solid #555555;
+	margin: 3px;
+}
+</style>
 </head>
-<body onload="document.forms.logindata.login.focus()" style="background: black url(bilder/Gossamer_Fractal_Texture_Stock_by_shd_stock.jpg) no-repeat;"><!- Breite=900 ->
-<table width=900>
-<tr height=600><td width=70></td><td valign=top><center>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<body onload="document.forms.logindata.login.focus()" style="background: black url(bilder/fractal_orb_by_aziznatour-d116ezt.jpg) no-repeat;"><!- Breite=900 ->
 
-<img src="bilder/TSC.png"><br>
-<br>
-<div style="opacity: .6; filter: alpha(opacity=60);">
-<?php
-if ($fehler)
-  print "Bitte noch einmal eingeben.<br>";
-  else
-  print "<br>";
-?>
-<form method="post" action="V/index.php" name="logindata">
-<input type="Text" name="login"><br>
-<input type="Password" name="pass"><br>
-<input type="submit" value="einloggen">
-</form>
-
-<br>
-<br>
-<a href="Anzeichen eines Imperiums.mp3" target="_blank">Anzeichen eines<br>Imperiums</a><br>
-<!--
-<a href="lexikon.php">Enzyklopädie</a>
--->
-
-</center></div></td></tr>
-<tr><td colspan=3><center><span style="font-size: 8"><a href="antique/index.php" class="downers">Die Alte Welt</a></span></center></td><td width=500></td></tr>
-</table>
-
+	<div id="loginwindow" style="display: none;">
+		<?php
+		if ($fehler)
+		  print "Bitte noch einmal eingeben.";
+		?>
+		<form method="post" action="V/index.php" name="logindata">
+		<input type="Text" name="login" id="login" placeholder="Nutzername"><br>
+		<input type="Password" name="pass"><br>
+		<input type="submit" value="einloggen">
+		</form>
+	</div>
+	<script>
+	$(function () {
+		window.setTimeout(function () {
+			$("#loginwindow").draggable().fadeIn(1500).find("#login").focus();
+		}, 400);
+	});
+	</script>
 
 </body>
 </html>

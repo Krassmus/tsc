@@ -194,11 +194,13 @@ class matrix extends ModuleGroupController {
 
     protected function htmlDiff($old, $new){
         $diff = $this->diff(explode(' ', $old), explode(' ', $new));
-        foreach($diff as $k){
-            if(is_array($k))
+        foreach($diff as $k) {
+            if(is_array($k)) {
                 $ret .= (!empty($k['d'])?"<ins>".implode(' ',$k['d'])."</ins> ":'').
-                (!empty($k['i'])?"<del>".implode(' ',$k['i'])."</del> ":'');
-            else $ret .= $k . ' ';
+                    (!empty($k['i'])?"<del>".implode(' ',$k['i'])."</del> ":'');
+            } else {
+                $ret .= $k . ' ';
+            }
         }
         return $ret;
     }
