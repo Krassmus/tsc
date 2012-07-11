@@ -18,7 +18,10 @@ if (!file_exists(dirname(__file__)."/config.php")) {
 <style>
 #loginwindow {
 	opacity: .8; filter: alpha(opacity=80); 
+	background-image: linear-gradient(top, #000000 0%, #222222 100%);
 	background-image: -moz-linear-gradient(top, #000000 0%, #222222 100%);
+	background-image: -o-linear-gradient(top, #000000 0%, #222222 100%);
+	background-image: -webkit-linear-gradient(top, #000000 0%, #222222 100%);
 	padding: 12px;
 	border-radius: 8px;
 	box-shadow: 0px 0px 50px #ffaaaa;
@@ -54,6 +57,11 @@ if (!file_exists(dirname(__file__)."/config.php")) {
 		}, 400);
 	});
 	</script>
-
+	
+	<? if (file_exists(dirname(__file__)."/impressum.php")) : ?>
+	<div style="position: absolute; font-size: 0.7em; color: #666666; top: 800px; left: 0px; padding-top: 20px; padding-bottom: 20px; text-align: center; background-image: -moz-linear-gradient(top, #0c0c0c 0%, #1d1d1d 100%); width: 100%">
+		<? include dirname(__file__)."/impressum.php" ?>
+	</div>
+	<? endif ?>
 </body>
 </html>
