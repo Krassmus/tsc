@@ -1,21 +1,4 @@
 <?php
-//disable magic_quotes:
-if (get_magic_quotes_gpc()) {
-    $process = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
-    while (list($key, $val) = each($process)) {
-        foreach ($val as $k => $v) {
-            unset($process[$key][$k]);
-            if (is_array($v)) {
-                $process[$key][stripslashes($k)] = $v;
-                $process[] = &$process[$key][stripslashes($k)];
-            } else {
-                $process[$key][stripslashes($k)] = stripslashes($v);
-            }
-        }
-    }
-    unset($process);
-}
-set_time_limit(0);
 
 require_once dirname(__file__)."/lib/DBManager.class.php";
 require_once dirname(__file__)."/lib/Cache.class.php";
@@ -27,6 +10,8 @@ require_once dirname(__file__)."/lib/Template.class.php";
 require_once dirname(__file__)."/lib/FileInclude.class.php";
 require_once dirname(__file__)."/lib/ModuleGroupController.class.php";
 require_once dirname(__file__)."/lib/ModuleLoader.class.php";
+
+Template::setRootPath(dirname(__file__));
 
 // CANONICAL_RELATIVE_PATH_STUDIP should end with a '/'
 $CANONICAL_RELATIVE_PATH = dirname($_SERVER['PHP_SELF']);

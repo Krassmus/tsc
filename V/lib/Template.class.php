@@ -10,8 +10,12 @@
  * to get the template-output as a string.
  */
 class Template {
-    var $place;
-    var $env = array();
+    
+    static public $root_path = null;
+    static public $replacements = array();
+    
+    protected $place;
+    protected $env = array();
 
     /**
      * returns an instance of a template
@@ -27,6 +31,7 @@ class Template {
      * @param string $place
      */
     public function __construct($place) {
+        $place = str_replace("\\", "/", $place);
         if (file_exists($place)) {
             $this->place = $place;
         } else {
@@ -50,6 +55,7 @@ class Template {
      * @return string : output of the template
      */
     public function render() {
+        $this->replace_template();
         foreach($this->env as $varname => $value) {
             ${$varname} = $value;
         }
@@ -58,6 +64,23 @@ class Template {
         $output = ob_get_contents();
         ob_end_clean();
         return $output;
+    }
+    
+    protected function replace_template() {
+        $relative_path = str_replace(self::$root_path, "", $this->place);
+        $this->place = self::$replacements[$relative_path]
+            ? self::$root_path."/".self::$replacements[$relative_path]
+            : $this->place;
+    }
+    
+    static public function setRootPath($path) {
+        self::$root_path = str_replace("\\", "/", $path)."/";
+    }
+    
+    static public function replace($path, $new_template) {
+        $path = str_replace("\\", "/", $path);
+        $new_template = str_replace("\\", "/", $new_template);
+        self::$replacements[$path] = $new_template;
     }
     
 }
