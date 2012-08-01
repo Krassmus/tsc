@@ -1,10 +1,36 @@
 @charset "UTF-8";
+@font-face {
+    font-family: OCR A Extended;
+    local: OCR A Extended;
+    src: url(./ocraext.ttf);  
+}
+@font-face {
+    font-family: Aero;
+    local: Aero;
+    src: url(./aeaswfte.ttf);  
+}
+
 body {
     color: #ffffff;
     background-color: black;
     background-position: 0px 0px;
     background-repeat: no-repeat;
     font-size: 12px;
+    font-family: OCR A Extended, Andale Mono, Lucida Sans Typewriter, Silom, Fixedsys, MONOSPACE;
+    background-image: url(images/The_Center_of_Chaos_background2.jpg);
+}
+input,button,select {
+    font-family: OCR A Extended, Andale Mono, Lucida Sans Typewriter, Silom, Fixedsys, MONOSPACE;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-family: Aero;
+    font-size: 16px;
+}
+h1 {
+    font-size: 18px;
+}
+h3, h4, h5, h6 {
+    font-size: 14px;
 }
 a {
     color: #ffffff;

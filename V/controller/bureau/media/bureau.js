@@ -17,7 +17,7 @@ TSC.bureau = {
             $("body").css("background-image", 
                             $(field).val() > 0 
                             ? "url('file.php?module=matrix&type=MatrixImage&file_id=" + $(field).val() + "')"
-                            : "url('media/images/Homecoming_by_keepwalking07.jpg')");
+                            : "url('media/images/The_Center_of_Chaos_background2.jpg')");
         }
     },
     changepassword: function () {

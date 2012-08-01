@@ -4,37 +4,20 @@
     <title>TSC</title>
     <meta http-quiv="content-type" content="text/html; charset=utf-8">
     <link rel="icon" href="media/images/favicon.png" type="image/png">
-    <script src="media/jquery-1.4.2.min.js" type="text/javascript"></script>
-    <script src="media/jquery-ui-1.8.5.custom.min.js" type="text/javascript"></script>
-    <script src="media/autoresize.jquery.min.js" type="text/javascript"></script>
-    <script src="media/jquery.scrollTo-min.js" type="text/javascript"></script>
-    <script src="media/qqUpload/fileuploader.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="media/qqUpload/fileuploader.css" type="text/css">
-    <script src="media/tsc.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="media/jquery-ui-1.8.5.custom.css" type="text/css">
-    <link rel="stylesheet" href="media/V.css" type="text/css">
 <?= FileInclude::getHeaderFiles() ?>
     <style>
-        <? if (!$stil['font']) : ?>
-        @font-face {
-            font-family: OCR A Extended;
-            local: OCR A Extended;
-            src: url(./media/ocraext.ttf);  
-        }
-        <? endif ?>
-        <? if (!$stil['headerfont']) : ?>
-        @font-face {
-            font-family: Aero;
-            local: Aero;
-            src: url(./media/aeaswfte.ttf);  
-        }
-        <? endif ?>
+        <? if ($stil['backgroundimage'] > 0) : ?>
         body {
-            background-image: url('<?= $stil['backgroundimage'] > 0 ? "file.php?module=matrix&type=MatrixImage&file_id=".$stil['backgroundimage'] : "media/images/Homecoming_by_keepwalking07.jpg" ?>');
+            background-image: url('file.php?module=matrix&type=MatrixImage&file_id=<?= $stil['backgroundimage'] ?>');
         }
+        <? endif ?>
         body, input, select, button {
-            font-family: <?= $stil['font'] ? escape($stil['font']) : "OCR A Extended, Andale Mono, Lucida Sans Typewriter, Silom, Fixedsys, MONOSPACE" ?>;
-            font-size: <?= $stil['fontsize'] ? escape($stil['fontsize']) : "12" ?>px;
+            <? if ($stil['font']) : ?>
+            font-family: <?= escape($stil['font']) ?>;
+            <? endif ?>
+            <? if ($stil['fontsize']) : ?>
+            font-size: <?= escape($stil['fontsize']) ?>px;
+            <? endif ?>
         }
         #main_frame {
             width: <?= floor($width/(count($modules)))*count($modules) ?>px;
@@ -44,15 +27,21 @@
             max-width: <?= floor($width/(count($modules))) ?>px;
         }
         h1, h2, h3, h4, h5, h6 {
-            font-family: <?= $stil['headerfont'] ? escape($stil['headerfont']) : "Aero" ?>;
-            font-size: <?= $stil['headerfontsize'] ? escape($stil['headerfontsize']) : "16" ?>px;
+            <? if ($stil['headerfont']) : ?>
+            font-family: <?= escape($stil['headerfont']) ?>;
+            <? endif ?>
+            <? if ($stil['headerfontsize']) : ?>
+            font-size: <?= escape($stil['headerfontsize']) ?>px;
+            <? endif ?>
         }
+        <? if ($stil['headerfontsize']) : ?>
         h1 {
-            font-size: <?= $stil['headerfontsize'] ? escape($stil['headerfontsize']+2) : "18" ?>px;
+            font-size: <?= escape($stil['headerfontsize']+2) ?>px;
         }
         h3, h4, h5, h6 {
-            font-size: <?= $stil['headerfontsize'] ? escape($stil['headerfontsize']-2) : "14" ?>px;
+            font-size: <?= escape($stil['headerfontsize']-2) ?>px;
         }
+        <? endif ?>
         h1, h2, h3, .colored {
             color: <?
                 if ($stil['headercolor'] === "0") print "#FFAD00";
