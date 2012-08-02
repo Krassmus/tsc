@@ -5,6 +5,20 @@ require_once dirname(__file__)."/Module.class.php";
 class FileInclude {
     
     static $headelements = array();
+    static $headercolor = array(
+        0 => array(
+            'color' => "#FFAD00",
+            'name' => "Rot"
+        ),
+        1 => array(
+            'color' => "#8BEDFF",
+            'name' => "Blau"
+        ),
+        2 => array(
+            'color' => "#FFAD00",
+            'name' => "#5CFF58"
+        )
+    );
     
     public static function init() {
         self::JS("jquery", "jquery-1.4.2.min.js");
@@ -81,6 +95,17 @@ class FileInclude {
 
     public static function Variables($js_text) {
         self::$headelements["predef"] .= $js_text . "\n";
+    }
+    
+    public static function setHeaderColor($index, $color, $name = null) {
+        self::$headercolor[$index]['color'] = $color;
+        if ($name) {
+            self::$headercolor[$index]['name'] = $name;
+        }
+    }
+    
+    public static function getHeaderColor($index) {
+        return self::$headercolor[$index]['color'];
     }
     
 }

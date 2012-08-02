@@ -154,6 +154,17 @@ table.fine_table > tbody > tr > td {
     background-color: #333333;
     background-image: url(images/ui-bg_dots-small.png);
     background-repeat: repeat;
+    transition-property:background-color;
+    transition-duration:0.2s;
+    -moz-transition-property:background-color;
+    -moz-transition-duration:0.2s;
+}
+.lightable:hover {
+    background-color: #666666;
+    transition-property:background-color;
+    transition-duration:0.2s;
+    -moz-transition-property:background-color;
+    -moz-transition-duration:0.2s;
 }
 
 #main_frame {

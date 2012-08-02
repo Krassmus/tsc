@@ -43,16 +43,12 @@
         }
         <? endif ?>
         h1, h2, h3, .colored {
-            color: <?
-                if ($stil['headercolor'] === "0") print "#FFAD00";
-                if ($stil['headercolor'] === "1") print "#8BEDFF";
-                if ($stil['headercolor'] === "2") print "#5CFF58";
-            ?>;
+            color: <?= FileInclude::getHeaderColor($stil['headercolor']) ?>;
         }
     </style>
     <script>
         TSC.stil = {
-            headercolor: '<?= $stil['headercolor'] ?>'
+            headercolor: '<?= FileInclude::getHeaderColor($stil['headercolor']) ?>'
         };
     </script>
 </head>

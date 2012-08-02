@@ -93,31 +93,6 @@ TSC.link = {
     }
 };
 
-/**
- * the mouseover effect. This is no css but javascript to make it more smooth
- */
-TSC.lighten = {
-    delaytime: 200,
-    steps: 5,
-    isHighlighted: {},
-    enlight: function (element) {
-        $(element).animate({
-            backgroundColor: "rgb(85, 85, 85)" 
-        }, this.delaytime);
-    },
-    darken: function (element) {
-        $(element).animate({
-            backgroundColor: "rgb(51, 51, 51)" 
-        }, this.delaytime);
-    }
-};
-$(".lightable").live("mouseenter", function () {
-    TSC.lighten.enlight(this);
-});
-$(".lightable").live("mouseleave", function () {
-    TSC.lighten.darken(this);
-});
-
 
 
 /* ------------------------------------------------------------------------
@@ -237,10 +212,6 @@ $(window.document).ajaxError(TSC.errorFunction);
  * some functions to be called whenever some content is loaded via ajax.
  */
 $(function () {
-    $("h1, h2, h3, h4, .colored").live("load", function () {
-        $(this).css("color", TSC.stil.headercolor === "1" ? "#8BEDFF" : (TSC.stil.headercolor === "2" ? "#5CFF58" : "#FFAD00"));
-        return true;
-    });
     $("textarea").live("load", function () {
         $(this).autoResize();
     });

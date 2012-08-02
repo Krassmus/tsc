@@ -2,7 +2,7 @@
 @font-face {
     font-family: Medieval Sharp;
     local: Medieval Sharp;
-    src: url(./medievalsharp.ttf);  
+    src: url(./medievalsharp.ttf);
 }
 
 body {
@@ -24,58 +24,55 @@ a {
     color: #005555;
     text-decoration: none;
     font-weight: bold;
+    transition-property:color;
+    transition-duration:0.8s;
+    -moz-transition-property:color;
+    -moz-transition-duration:0.8s;
 }
 a:hover {
-    text-decoration: underline;
+    color: black;
+    transition-property:color;
+    transition-duration:0.8s;
+    -moz-transition-property:color;
+    -moz-transition-duration:0.8s;
 }
 a[onclick] {
     cursor: pointer;
 }
 input {
-    height: 1.4em;
-    background-color: #555555;
-    color: #ffffff;
-    border: 0px solid #aaaaaa;
+    border: dotted thin rgba(60,60,60,0.5);
     display: inline-block;
-    vertical-align: text-bottom;
     font-family: Medieval Sharp;
+    background: transparent;
 }
 input[type=text], input[type=password] {
     box-shadow:inset 0px 0px 4px #222222;
 }
 input.file {
 }
-input[type=button], input[type=submit], .ui-button {
+input[type=button], input[type=submit], .ui-button, button {
     cursor: pointer;
     display: inline-block;
-    padding: 2px;
+    padding: 3px;
     padding-left: 20px;
     padding-right: 20px;
-    border-radius: 0px;
-    -moz-border-radius: 0px;
-    background: #444444 url(images/ui-bg_highlight-soft_44_444444_1x100.png) 50% 50% repeat-x;
-    vertical-align: text-bottom;
-	height: 17px;
-    
+    border: dotted thin rgba(60,60,60,0.5);
+    background: transparent;
 }
 input[type=checkbox] {
     display: inline-block;
 }
 select {
-    background-color: #555555;
+    background: transparent;
     display: inline-block;
-    color: #ffffff;
-    border: 0px solid #aaaaaa;
+    border: dotted thin rgba(60,60,60,0.5);
     cursor: pointer;
-	vertical-align: text-bottom;
-	height: 17px;
-    /*background: #444444 url(images/ui-bg_highlight-soft_44_444444_1x100.png) 50% 50% repeat-x;*/
-    box-shadow:inset 0px 0px 4px #222222;
     font-family: Medieval Sharp;
 }
 textarea {
-    color: #ffffff;
-    background-color: #555555;
+    color: #000000;
+    opacity: 0.5;
+    background-color: #ffffff;
     border: 0px;
     display: block;
     box-shadow:inset 0px 0px 4px #222222;
@@ -86,7 +83,7 @@ button {
 }
 h1, h2, h3 {
     font-weight: normal;
-    text-shadow: #222222 0px 0px 3px;
+    text-shadow: rgba(40,40,40,0.5) 0px 0px 5px;
 }
 h1 {
     font-size: 1.6em;
@@ -106,30 +103,30 @@ h2 {
 }
 
 div.logo {
-	text-align: center;
-	color: #ffffff;
-	text-shadow: 0px 0px 3px #000000;
-	font-weight: bolder;
-	display: inline-block;
-	border: thin solid #aaaaaa;
-	border-radius: 7px;
-	-moz-border-radius: 7px;
-	background-position: center center;
-	background-color: #333333;
-        background-repeat: no-repeat;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 0px 0px 3px #000000;
+    font-weight: bolder;
+    display: inline-block;
+    border: thin solid #aaaaaa;
+    border-radius: 7px;
+    -moz-border-radius: 7px;
+    background-position: center center;
+    background-color: #333333;
+    background-repeat: no-repeat;
 }
 div.logo.small {
-	padding: 5px;
-	background-size: 100%;
-	-moz-background-size: 100%;
-	width: 24px;
-        height: 24px;
+    padding: 5px;
+    background-size: 100%;
+    -moz-background-size: 100%;
+    width: 24px;
+    height: 24px;
 }
 div.logo.medium {
-	padding: 20px;
-	background-size: 100%;
-	-moz-background-size: 100%;
-	width: 110px;
+    padding: 20px;
+    background-size: 100%;
+    -moz-background-size: 100%;
+    width: 110px;
 }
 
 table.fine_table {
@@ -145,9 +142,6 @@ table.fine_table > tbody > tr > td {
 }
 
 .lightable {
-    background-color: #333333;
-    background-image: url(images/ui-bg_dots-small.png);
-    background-repeat: repeat;
 }
 
 #main_frame {
@@ -155,6 +149,9 @@ table.fine_table > tbody > tr > td {
     top: 9px;
     left: 63px;
     opacity: 0.85;
+    background-image: url(oldpaper1.png);
+    background-repeat: repeat;
+    box-shadow: inset 0px 0px 50px #551111;
 }
 div.header {
     overflow: hidden;
@@ -167,16 +164,23 @@ div.header > div {
     height: 56px;
     width: 100%;
     margin: 2px;
-    background-color: #333333;
-    background-image: url(oldpaper1.png);
-    background-repeat: repeat;
-    border: 1px solid #333333;
     white-space: nowrap;
 }
 div.header h2 {
     margin: 0px;
     display: inline-block;
     vertical-align: middle;
+    transition-property:color;
+    transition-duration:0.8s;
+    -moz-transition-property:color;
+    -moz-transition-duration:0.8s;
+}
+div.header:hover h2 {
+    color: black !important;
+    transition-property:color;
+    transition-duration:0.8s;
+    -moz-transition-property:color;
+    -moz-transition-duration:0.8s;
 }
 div.header.alert h2 {
     color: #fffe7e !important; /* muss sich gegen die Angabe vom Header durchsetzen */
@@ -204,12 +208,9 @@ div.header.bridge ul {
     height: 60px;
 }
 div.content {
-    background-color: #333333;
-    background-image: url(oldpaper1.png);
     background-repeat: repeat;
     clear: both;
     margin: 2px;
-    border: 1px solid #333333;
     padding-left: 70px;
     padding-right: 70px;
     max-width: 100%;
