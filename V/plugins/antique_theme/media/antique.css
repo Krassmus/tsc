@@ -11,6 +11,7 @@ body {
     background-position: 0px 0px;
     background-repeat: no-repeat;
     font-size: 12px;
+    backgroun
     font-family: Medieval Sharp;
     background-image: url(./another_castle2.jpg);
 }
@@ -73,7 +74,7 @@ select {
 textarea {
     color: #000000;
     opacity: 0.5;
-    background-color: #ffffff;
+    background-color: rgba(255,255,255,0.1);
     border: 0px;
     display: block;
     box-shadow:inset 0px 0px 4px #222222;
@@ -151,6 +152,7 @@ table.fine_table > tbody > tr > td {
     left: 63px;
     /*opacity: 0.95;*/
     background-image: url(oldpaper1.png);
+    background-color: #eed396;
     background-repeat: repeat;
     box-shadow: inset 0px 0px 50px #551111, 0px 0px 50px rgba(0,0,0,0.3);
 }
