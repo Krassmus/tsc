@@ -231,6 +231,7 @@ div.content {
     padding-right: 70px;
     max-width: 100%;
     overflow: hidden;
+    padding-bottom: 30px;
 }
 #bodies > div {
     display: none;

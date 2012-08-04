@@ -12,6 +12,7 @@ body {
     background-repeat: no-repeat;
     font-size: 12px;
     font-family: Medieval Sharp;
+    background-image: url(./another_castle2.jpg);
 }
 h1,h2,h3,h4,h5,h6 {
     font-family: Medieval Sharp;
@@ -148,10 +149,10 @@ table.fine_table > tbody > tr > td {
     position: absolute;
     top: 9px;
     left: 63px;
-    opacity: 0.85;
+    /*opacity: 0.95;*/
     background-image: url(oldpaper1.png);
     background-repeat: repeat;
-    box-shadow: inset 0px 0px 50px #551111;
+    box-shadow: inset 0px 0px 50px #551111, 0px 0px 50px rgba(0,0,0,0.3);
 }
 div.header {
     overflow: hidden;
@@ -213,6 +214,7 @@ div.content {
     margin: 2px;
     padding-left: 70px;
     padding-right: 70px;
+    padding-bottom: 30px;
     max-width: 100%;
     overflow: hidden;
 }
@@ -247,10 +249,6 @@ div.content {
     cursor: pointer;
     padding-left: 20px;
     padding-right: 20px;
-    background: #444444 url(images/ui-bg_highlight-soft_44_444444_1x100.png) 50% 50% repeat-x;
-    /*box-shadow: 0px 0px 0px #cccccc;
-    -moz-box-shadow: 0px 0px 0px #cccccc;
-    -webkit-box-shadow: 0px 0px 0px #cccccc;*/
  }
  
  
@@ -378,4 +376,8 @@ div.matrix_uploader:hover {
 #matrix_suchmaske_results ul > li {
     margin-left: 0px;
     padding-left: 0px;
+}
+
+.messenger {
+    background-color: rgba(255,255,255,0.1) !important;
 }
