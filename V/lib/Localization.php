@@ -3,7 +3,7 @@
 require_once dirname(__file__)."/locale/I18nConnector.php";
 
 function l($text, $language_id = null) {
-    $translation = Locale::translate($text, $language_id);
+    $translation = Localization::translate($text, $language_id);
     $translated = $text !== $translation;
     return $translated 
         ? '<span class="translation '.$language_id.'" data-original-string="'.escape($text).'">'.escape($translation).'</span>'
@@ -11,10 +11,10 @@ function l($text, $language_id = null) {
 }
 
 function ll($text, $language_id = null) {
-    return Locale::translate($text, $language_id);
+    return Localization::translate($text, $language_id);
 }
 
-class Locale {
+class Localization {
     static protected $replacements = array();
     
     static public function translate($text, $language_id = null) {
