@@ -33,7 +33,7 @@ class matrix extends ModuleGroupController {
     }
     
     public function getTitle() {
-        return "Matrix";
+        return ll("Matrix");
     }
 
     protected function framedActions() {

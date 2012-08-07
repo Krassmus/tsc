@@ -29,7 +29,7 @@ class news extends ModuleController {
     }
     
     public function getTitle() {
-        return "News";
+        return ll("News");
     }
 
     public function sendData() {

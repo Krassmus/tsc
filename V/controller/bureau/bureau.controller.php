@@ -24,7 +24,7 @@ class bureau extends ModuleGroupController {
     }
     
     public function getTitle() {
-        return "Büro";
+        return ll("Büro");
     }
 
     protected function framedActions() {

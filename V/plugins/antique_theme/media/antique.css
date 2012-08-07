@@ -188,6 +188,7 @@ div.header:hover h2 {
 }
 div.header.alert h2 {
     color: #fffe7e !important; /* muss sich gegen die Angabe vom Header durchsetzen */
+    text-shadow: rgba(255, 120, 40, 0.5) 0px 0px 5px;
     text-decoration: underline;
 }
 

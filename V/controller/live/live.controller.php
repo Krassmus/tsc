@@ -20,7 +20,7 @@ class live extends ModuleController {
     }
     
     public function getTitle() {
-        return "Live";
+        return ll("Live");
     }
 
     public function defaultAction() {

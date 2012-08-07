@@ -22,7 +22,7 @@ class haushalt extends ModuleController {
     }
     
     public function getTitle() {
-        return "Haushalt";
+        return ll("Haushalt");
     }
 
     ////////////////////////////////////////////////////////////////////////////

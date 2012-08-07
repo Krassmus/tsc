@@ -31,7 +31,7 @@
     <div id="live_writer" style="display: none;">
         <input type="hidden" id="live_writer_write_to" value="">
         <ul id="live_writer_forcename"></ul>
-        <textarea id="live_message_content" class="autoresize" style="background-color: #363636;"></textarea>
+        <textarea id="live_message_content" class="autoresize"></textarea>
         <input type="button" value="abschicken" onClick="TSC.live.sendMessage();">
     </div>
 </div>
