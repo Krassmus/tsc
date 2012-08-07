@@ -2,13 +2,12 @@
 
 require_once dirname(__file__)."/lib/DBManager.class.php";
 require_once dirname(__file__)."/lib/Cache.class.php";
-require_once dirname(__file__)."/lib/language.php";
 require_once dirname(__file__)."/lib/Text.class.php";
 require_once dirname(__file__)."/lib/Forces.class.php";
 require_once dirname(__file__)."/lib/Groups.class.php";
 require_once dirname(__file__)."/lib/Template.class.php";
 require_once dirname(__file__)."/lib/FileInclude.class.php";
-require_once dirname(__file__)."/lib/Locale.php";
+require_once dirname(__file__)."/lib/Localization.php";
 
 FileInclude::init();
 

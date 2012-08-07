@@ -7,9 +7,9 @@ class antique_theme extends Module {
         FileInclude::setHeaderColor(0, "#aa1122");
         FileInclude::setHeaderColor(1, "#111155");
         FileInclude::setHeaderColor(2, "#115555");
-        Locale::setReplacement("de", "News", "Kunde");
-        Locale::setReplacement("de", "Matrix", "Bibliothek");
-        Locale::setReplacement("de", "Live", "Depeschen");
+        Localization::setReplacement("de", "News", "Kunde");
+        Localization::setReplacement("de", "Matrix", "Bibliothek");
+        Localization::setReplacement("de", "Live", "Depeschen");
     }
     
 }
