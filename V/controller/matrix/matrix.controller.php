@@ -540,7 +540,14 @@ class matrix extends ModuleGroupController {
     }
 
     static public function insertMatrixLinks($text) {
-        $text = preg_replace('/\[\[(.*?)\]\]/e', 'matrix::getMatrixLink("$1")', $text);
+        $text = preg_replace_callback(
+            '/\[\[(.*?)\]\]/',
+            function($match) {
+                return matrix::getMatrixLink($match[1]);
+            },
+
+            $text
+        );
         return $text;
     }
 

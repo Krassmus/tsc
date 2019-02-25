@@ -7,7 +7,13 @@
 class Matrix3D {
 
     static public function special_format_stargroup($text) {
-        $text = preg_replace('/\[stargroup([^\]]*)\]([^~]*)\[\/stargroup\]/e', "Matrix3D::createStargroup('\\2', '\\1')", $text);
+        $text = preg_replace_callback(
+            '/\[stargroup([^\]]*)\]([^~]*)\[\/stargroup\]/',
+            function ($match) {
+                return Matrix3D::createStargroup($match[2], $match[1]);
+            },
+            $text
+        );
         return $text;
     }
 
