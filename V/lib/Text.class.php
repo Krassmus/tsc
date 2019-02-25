@@ -28,7 +28,14 @@ class Text {
 
     static protected function subformat($text, $aspects = array()) {
         self::$depth++;
-        $text = preg_replace('/\{\{([^~]+?)\}\}/e', 'self::subformat("\\1", $aspects)', $text);
+        //$text = preg_replace('/\{\{([^~]+?)\}\}/e', 'self::subformat("\\1", $aspects)', $text);
+        $text = preg_replace_callback(
+            '/\{\{([^~]+?)\}\}/',
+            function($match) use ($aspects) {
+                return self::subformat($match, $aspects);
+            },
+            $text
+        );
         self::$depth--;
         foreach ($aspects as $aspect) {
             if (isset(self::$aspects[$aspect])) {
