@@ -38,7 +38,7 @@ class NewsPDF extends DBFile {
         return true;
     }
     
-    public function upload() {
+    public function upload($db_entries = array()) {
         parent::upload(
             array(
                 "fromforce" => $_REQUEST['force_id'],

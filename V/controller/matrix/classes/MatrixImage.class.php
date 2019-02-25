@@ -36,7 +36,7 @@ class MatrixImage extends DBFile {
         return parent__writable();
     }
     
-    public function create() {
+    public function create($db_entries = array()) {
         parent::create(
             array(
                 "autor_force_id" => $_REQUEST['force_id'], 
@@ -45,7 +45,7 @@ class MatrixImage extends DBFile {
         );
     }
     
-    public function update() {
+    public function update($db_entries = array()) {
         parent::update(
             array(
                 "autor_force_id" => $_REQUEST['force_id'], 
