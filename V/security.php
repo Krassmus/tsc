@@ -65,12 +65,16 @@ $result = $db->query("SELECT password " .
     "WHERE login = ".$db->quote($login)." " .
         "AND locked != '1' "
     )->fetch();
-if (!$result)
-  //Falscher Login.
-  header("Location: ../index.php?fehler=1");
-if ($result['password'] != $pass)
-  //  die("Falsches Passwort.");
-  header("Location: ../index.php?fehler=2");
+if (!$result) {
+    //Falscher Login.
+    header("Location: ../index.php?fehler=1");
+    die();
+}
+if ($result['password'] != $pass) {
+    //  die("Falsches Passwort.");
+    header("Location: ../index.php?fehler=2");
+    die();
+}
 
 #Initialisieren der Variablen $force, $gruppe und $masterof als Arrays
 $force = Forces::playersForces($login);
