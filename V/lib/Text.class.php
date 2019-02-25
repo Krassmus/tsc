@@ -32,7 +32,7 @@ class Text {
         $text = preg_replace_callback(
             '/\{\{([^~]+?)\}\}/',
             function($match) use ($aspects) {
-                return self::subformat($match, $aspects);
+                return self::subformat($match[1], $aspects);
             },
             $text
         );
@@ -439,20 +439,39 @@ class Text {
     }
   
     static protected function special_format_textstyle($text) {
-        $text = preg_replace_callback('/\n\|\|([^~]+?)\|\|\n\n/', "Text::gettable", $text);
+        $text = preg_replace_callback(
+            '/\n\|\|([^~]+?)\|\|\n\n/',
+            function ($match) { return Text::gettable($match[1]); },
+            $text
+        );
         $text = preg_replace('/\n\n!!(.*?)\n\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/\n!!(.*?)\n\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/\n\n!!(.*?)\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/\n!!(.*?)\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/!!(.*?)\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/\%\%([^~]+?)\%\%/', '<i>$1</i>', $text);
-        $text = preg_replace_callback('/\n\-([^<]+?)\n\n/', "Text::makelist", $text);
-        $text = preg_replace_callback('/\n\+([^<]+?)\n\n/', "Text::makenum", $text);
+        $text = preg_replace_callback(
+            '/\n\-([^<]+?)\n\n/',
+            function ($match) { return Text::makelist($match[1]); },
+            $text
+        );
+        $text = preg_replace_callback(
+            '/\n\+([^<]+?)\n\n/',
+            function ($match) { return Text::makenum($match[1]); },
+            $text
+        );
         return $text;
     }
 
     static protected function special_format_images($text) {
-        $text = preg_replace("/\[img\:(\w[\w|\:|\.|\-%]+)\](\w[\w|\.|\-]+)/e", "'<img src=".'"'."file.php?module=matrix&type=MatrixImage&file_id='.self::getpic('\\2').'".'"'." '.self::pic_parameters('\\1').'>'", $text);
+        $text = preg_replace_callback(
+            "/\[img\:(\w[\w|\:|\.|\-%]+)\](\w[\w|\.|\-]+)/",
+            function ($match) {
+                return "'<img src=".'"'."file.php?module=matrix&type=MatrixImage&file_id='.self::getpic('\\2').'".'"'." '.self::pic_parameters('\\1').'>'"
+            },
+
+            $text
+        );
         $text = preg_replace("/\[img\](\w[\w|\.|\-%]+)/e", "'<img src=".'"'."file.php?module=matrix&type=MatrixImage&file_id='.self::getpic('\\1').'".'"'.">'", $text);
         return $text;
     }
