@@ -467,9 +467,8 @@ class Text {
         $text = preg_replace_callback(
             "/\[img\:(\w[\w|\:|\.|\-%]+)\](\w[\w|\.|\-]+)/",
             function ($match) {
-                return "'<img src=".'"'."file.php?module=matrix&type=MatrixImage&file_id='.self::getpic('\\2').'".'"'." '.self::pic_parameters('\\1').'>'"
+                return "<img src=".'"'."file.php?module=matrix&type=MatrixImage&file_id=".self::getpic($match[2]).'"'." ".self::pic_parameters($match[1]).'>';
             },
-
             $text
         );
         $text = preg_replace("/\[img\](\w[\w|\.|\-%]+)/e", "'<img src=".'"'."file.php?module=matrix&type=MatrixImage&file_id='.self::getpic('\\1').'".'"'.">'", $text);
