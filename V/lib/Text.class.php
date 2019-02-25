@@ -270,7 +270,7 @@ class Text {
         return $text;
         }
 
-    static protected function makelist($listtext, $stage) {
+    static protected function makelist($listtext, $stage = 0) {
         $listtext = explode("\n", $listtext);
         $text = "<ul";
         if ($stage == 1) $text .= ' type="circle"';
@@ -313,7 +313,7 @@ class Text {
         $text .= "</ul>";
         return $text;
         }
-    static function makenum($numtext, $stage)
+    static function makenum($numtext, $stage = 0)
         {
         $numtext = explode("\n", $numtext);
         $text = "<ol";
@@ -439,15 +439,15 @@ class Text {
     }
   
     static protected function special_format_textstyle($text) {
-        $text = preg_replace('/\n\|\|([^~]+?)\|\|\n\n/e', "self::gettable('\\1')", $text);
+        $text = preg_replace_callback('/\n\|\|([^~]+?)\|\|\n\n/', "Text::gettable", $text);
         $text = preg_replace('/\n\n!!(.*?)\n\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/\n!!(.*?)\n\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/\n\n!!(.*?)\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/\n!!(.*?)\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/!!(.*?)\n/', '<h2>$1</h2>', $text);
         $text = preg_replace('/\%\%([^~]+?)\%\%/', '<i>$1</i>', $text);
-        $text = preg_replace('/\n\-([^<]+?)\n\n/e', "self::makelist('\\1', 0)", $text);
-        $text = preg_replace('/\n\+([^<]+?)\n\n/e', "self::makenum('\\1', 0)", $text);
+        $text = preg_replace_callback('/\n\-([^<]+?)\n\n/', "Text::makelist", $text);
+        $text = preg_replace_callback('/\n\+([^<]+?)\n\n/', "Text::makenum", $text);
         return $text;
     }
 
