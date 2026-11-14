@@ -11,11 +11,11 @@
     <tr>
         <td>Mächte der Sternengruppe</td>
         <td>
-        <? foreach($maechte[$gruppe] as $macht) : ?>
+        <?php foreach($maechte[$gruppe] as $macht) : ?>
             <a onClick="TSC.bureau.adminMachtanzeige('<?= $gruppe ?>', '<?= $macht['id'] ?>');">
                 <?= $macht['name'] ?> (<?= implode(" ", $macht['players']) ?>)
             </a><br>
-        <? endforeach ?>
+        <?php endforeach ?>
         </td>
     </tr>
     <tr>
@@ -70,22 +70,22 @@
                     <tr group="<?= $gruppe ?>">
                         <td>
                             <ul id="bureau_<?= $gruppe ?>_modules" style="min-width: 200px; border: 1px rgba(255, 255, 255, 0.4) solid;">
-                            <? foreach ($activated_modules[$gruppe] as $modul) : ?>
+                            <?php foreach ($activated_modules[$gruppe] as $modul) : ?>
                                 <li class="module" style="cursor: move;">
                                     <?= escape($modul['modulename']) ?>
                                 </li>
-                            <? endforeach ?>
+                            <?php endforeach ?>
                             </ul>
                         </td>
                         <td>
                             <ul id="bureau_<?= $gruppe ?>_possiblemodules" style="min-width: 200px; border: 1px rgba(255, 255, 255, 0.4) solid;">
-                            <? foreach (array_merge($controller, $plugins) as $modul) : ?>
-                                <? if (!isset($activated_modules[$gruppe][$modul])) : ?>
+                            <?php foreach (array_merge($controller, $plugins) as $modul) : ?>
+                                <?php if (!isset($activated_modules[$gruppe][$modul])) : ?>
                                 <li class="module" style="cursor: move;">
                                     <?= escape($modul) ?>
                                 </li>
-                                <? endif ?>
-                            <? endforeach ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
                             </ul>
                         </td>
                     </tr>

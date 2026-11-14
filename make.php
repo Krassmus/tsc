@@ -12,19 +12,23 @@ $msg = array();
 $empty_db = true;
 
 //Config-Datei schreiben:
-if (!file_exists(dirname(__file__)."/config.php") && $_REQUEST['db_type']) {
-	$db = DBManager::create($_REQUEST['db_type'], $_REQUEST['db_name'], $_REQUEST['db_host'], $_REQUEST['db_user'], $_REQUEST['db_pass']);
+if (!file_exists(dirname(__file__)."/config.php") && !empty($_REQUEST['db_type'])) {
+	$db = DBManager::create($_REQUEST['db_type'], $_REQUEST['db_name'] ?? '', $_REQUEST['db_host'] ?? '', $_REQUEST['db_user'] ?? '', $_REQUEST['db_pass'] ?? '');
   
   if ($db) {
+		//var_export sorgt dafuer, dass Eingaben nicht als PHP-Code interpretiert werden
 		$text = '<?php
 
 //database setup:
-$DB_TYPE = "'.$_REQUEST['db_type'].'";       //only mysql works yet
-$DB_HOST = "'.$_REQUEST['db_host'].'";
-$DB_NAME = "'.$_REQUEST['db_name'].'";
-$DB_USER = "'.$_REQUEST['db_user'].'";
-$DB_PASSWORD = "'.$_REQUEST['db_pass'].'";
+$DB_TYPE = '.var_export((string) $_REQUEST['db_type'], true).';       //only mysql works yet
+$DB_HOST = '.var_export((string) ($_REQUEST['db_host'] ?? ''), true).';
+$DB_NAME = '.var_export((string) ($_REQUEST['db_name'] ?? ''), true).';
+$DB_USER = '.var_export((string) ($_REQUEST['db_user'] ?? ''), true).';
+$DB_PASSWORD = '.var_export((string) ($_REQUEST['db_pass'] ?? ''), true).';
 
+//salts fuer die Passwort-Hashes:
+$salt1 = '.var_export(bin2hex(random_bytes(16)), true).';
+$salt2 = '.var_export(bin2hex(random_bytes(16)), true).';
 ';
     $handler = fopen(dirname(__file__)."/config.php", "w");
     fwrite($handler, $text);
@@ -47,11 +51,14 @@ $DB_PASSWORD = "'.$_REQUEST['db_pass'].'";
 
 if (file_exists(dirname(__file__)."/config.php") && !$empty_db) {
 	header("Location: index.php");
+	exit;
 }
 
 ?>
+<!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Initialisieren: TSC V Webmodul</title>
 </head>
 <body>
@@ -63,9 +70,10 @@ foreach($msg as $message) {
 
 if (!file_exists(dirname(__file__)."/config.php")) :
 ?>
-<h1>Vernk&uuml;pfen Sie TSC mit der Datenbank</h1>
+<h1>Verkn&uuml;pfen Sie TSC mit der Datenbank</h1>
 
 <form action="" method="post">
+<input type="hidden" name="db_type" value="mysql">
 <table>
 <tr>
   <td>Server / Host - Adresse</td><td><input type="text" name="db_host"></td>
@@ -90,8 +98,8 @@ if (!file_exists(dirname(__file__)."/config.php")) :
 <h1>Erste Daten</h1>
 
 Ihre Datenbank ist zwar erkannt, aber noch leer. Vermutlich wollen Sie eine erste 
-Gruppe gründen und einen Account als Spielleiter dieser Gruppe einrichten. 
-Aber auf jeden Fall sollte die Datenbank ein Gerüst bekommen.
+Gruppe grÃ¼nden und einen Account als Spielleiter dieser Gruppe einrichten. 
+Aber auf jeden Fall sollte die Datenbank ein GerÃ¼st bekommen.
 
 <form action="" method="post">
 <table>
@@ -110,7 +118,7 @@ Aber auf jeden Fall sollte die Datenbank ein Gerüst bekommen.
 </table>
 </form>
 
-<? endif; ?>
+<?php endif; ?>
 
 </body>
 </html>

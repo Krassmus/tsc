@@ -39,7 +39,7 @@ class Module {
      * @return mixed : depends on $expected, null if no function was registered
      */
     protected function fire($point, $expected = "string", $parameter = array()) {
-        is_array(self::$firepoints[$point]) OR self::$firepoints[$point] = array();
+        isset(self::$firepoints[$point]) && is_array(self::$firepoints[$point]) OR self::$firepoints[$point] = array();
         switch ($expected) {
             case "integer":
                 $ret = 0;

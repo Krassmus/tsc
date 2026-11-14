@@ -68,7 +68,7 @@ class Template {
     
     protected function replace_template() {
         $relative_path = str_replace(self::$root_path, "", $this->place);
-        $this->place = self::$replacements[$relative_path]
+        $this->place = !empty(self::$replacements[$relative_path])
             ? self::$root_path."/".self::$replacements[$relative_path]
             : $this->place;
     }

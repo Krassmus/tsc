@@ -17,13 +17,13 @@ class ModuleLoader {
                 $mod['type']."/".
                 $mod['modulename']."/".
                 $mod['modulename'].".controller.php";
-            if (!self::$loaded[$mod['type']][$mod['modulename']] && file_exists($modpath)) {
+            if (empty(self::$loaded[$mod['type']][$mod['modulename']]) && file_exists($modpath)) {
                 include $modpath;
                 self::$loaded[$mod['type']][$mod['modulename']] = true;
             }
         }
-        $got_bureau = self::$loaded['controller']['bureau'];
-        $got_abmelden = self::$loaded['controller']['abmelden'];
+        $got_bureau = !empty(self::$loaded['controller']['bureau']);
+        $got_abmelden = !empty(self::$loaded['controller']['abmelden']);
         if (!$got_bureau) {
             include dirname(__file__)."/../controller/bureau/bureau.controller.php";
         }
@@ -34,7 +34,7 @@ class ModuleLoader {
         //Einbinden der Controller:
         $controller = array();
         foreach ($module_data as $mod) {
-            if (self::$loaded[$mod['type']][$mod['modulename']]) {
+            if (!empty(self::$loaded[$mod['type']][$mod['modulename']])) {
                 $controller[] = new $mod['modulename']();
             }
         }

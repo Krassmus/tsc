@@ -11,6 +11,7 @@ class DBFile {
     public $filename_field = "filename";
     public $content_field = "content";
     public $date_field = "date";
+    public $id_field = "id";
     public $mime_type_part1 = "text";
     public $width_field = NULL;
     public $height_field = NULL;
@@ -20,8 +21,6 @@ class DBFile {
         $this->id = $id;
         if (!$this->table) {
             throw new Exception("Datei-Typ hat keinen zugewiesenen Tabellennamen in der Datenbank.");
-            $this->__destruct();
-            return;
         }
         if (!$this->id_field) {
             $db = DBManager::get();
@@ -65,7 +64,7 @@ class DBFile {
             } else {
                 header("Content-type: ".$file_data[$this->mime_type_field]);
             }
-            if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && $file_data[$this->date_field] < strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            if (!empty($_SERVER['HTTP_IF_MODIFIED_SINCE']) && (int) $file_data[$this->date_field] <= strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
                 //cache-control:
                 header("HTTP/1.1 304 Not Modified");
                 exit;
@@ -84,7 +83,7 @@ class DBFile {
             $file_data = $db->query("SELECT * " .
                                "FROM `".$this->table."` " .
                                "WHERE ".$this->id_field." = ".$db->quote($this->id))->fetch();
-            file_put_contents($file_path, $file_data['content']);
+            file_put_contents($file_path, $file_data[$this->content_field]);
         }
     }
     
@@ -160,6 +159,7 @@ class DBFile {
             if ($this->width_field OR $this->height_field) {
                 $size = getimagesize($result['path']);
             }
+            $time = time();
             $additional_db_entries = "";
             foreach ($db_entries as $key => $value) {
                 $additional_db_entries .= $key . " = " . $db->quote($value) . ", ";
@@ -203,6 +203,7 @@ class DBFile {
             if ($this->width_field OR $this->height_field) {
                 $size = getimagesize($result['path']);
             }
+            $time = time();
             $additional_db_entries = "";
             foreach ($db_entries as $key => $value) {
                 $additional_db_entries .= $key . " = " . $db->quote($value) . ", ";
@@ -215,7 +216,6 @@ class DBFile {
                     ($this->mime_type_field ? "`".addslashes($this->mime_type_field)."` = ".$db->quote($mime_type).", " : "") .
                     "`".addslashes($this->content_field)."` = ".$db->quote(file_get_contents($result['path']))." ";
             if ($this->id) {
-                print "hi ".$this->id;
                 $db->exec(
                     "UPDATE `".addslashes($this->table)."` " .
                     $set .

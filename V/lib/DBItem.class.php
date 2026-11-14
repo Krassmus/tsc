@@ -6,7 +6,7 @@
 
 require_once dirname(__FILE__)."/DBInfos.class.php";
 
-class DBItem extends DBInfos implements ArrayAccess {
+abstract class DBItem extends DBInfos implements ArrayAccess {
 
     protected $id = null;
     protected $is_new = false;
@@ -33,7 +33,7 @@ class DBItem extends DBInfos implements ArrayAccess {
         if (!$this->id) {
             //create ID?
         }
-        return $id;
+        return $this->id;
     }
 
     public function setId($new_id) {

@@ -33,7 +33,7 @@ class MatrixImage extends DBFile {
     }
     
     public function writable() {
-        return parent__writable();
+        return parent::writable();
     }
     
     public function create($db_entries = array()) {
@@ -57,7 +57,7 @@ class MatrixImage extends DBFile {
     public function getSize() {
         $db = DBManager::get();
         return $db->query(
-                "SELECT width, height FROM bilder WHERE id = ".$db->quote($thid->id)." " .
+                "SELECT width, height FROM bilder WHERE id = ".$db->quote($this->id)." " .
         "")->fetchAll();
     }
     

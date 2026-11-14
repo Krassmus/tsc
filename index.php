@@ -5,6 +5,7 @@ session_destroy();
 
 if (!file_exists(dirname(__file__)."/config.php")) {
 	header("Location: make.php");
+	exit;
 }
 
 ?>
@@ -41,7 +42,7 @@ if (!file_exists(dirname(__file__)."/config.php")) {
 
 	<div id="loginwindow" style="display: none;">
 		<?php
-		if ($fehler)
+		if (!empty($_GET['fehler']))
 		  print "Bitte noch einmal eingeben.";
 		?>
 		<form method="post" action="V/index.php" name="logindata">
@@ -58,10 +59,10 @@ if (!file_exists(dirname(__file__)."/config.php")) {
 	});
 	</script>
 	
-	<? if (file_exists(dirname(__file__)."/impressum.php")) : ?>
+	<?php if (file_exists(dirname(__file__)."/impressum.php")) : ?>
 	<div style="position: absolute; font-size: 0.7em; color: #666666; top: 800px; left: 0px; padding-top: 20px; padding-bottom: 20px; text-align: center; background-image: -moz-linear-gradient(top, #0c0c0c 0%, #1d1d1d 100%); width: 100%">
-		<? include dirname(__file__)."/impressum.php" ?>
+		<?php include dirname(__file__)."/impressum.php" ?>
 	</div>
-	<? endif ?>
+	<?php endif ?>
 </body>
 </html>

@@ -1,16 +1,16 @@
 <tr id="news_search_<?= $id ?>" class="lightable<?= $row['pdf'] ? " pdf" : "" ?><?= $row['flag'] ? " marked" : "" ?>" timestamp="<?= $row['date'] ?>">
     <td>
-    	<? if ($row['frompicture']) : ?>
+    	<?php if ($row['frompicture']) : ?>
         <div style="background-image: url('file.php?module=matrix&type=MatrixImage&file_id=<?= $row['frompicture'] ?>');" class="logo medium">
-        <? endif ?>
-        <? print escape(Forces::id2name($row['fromforce'])) ?>
-        <? if ($row['frompicture']) : ?>
+        <?php endif ?>
+        <?php print escape(Forces::id2name($row['fromforce'])) ?>
+        <?php if ($row['frompicture']) : ?>
         </div>
-        <? endif ?>
+        <?php endif ?>
     </td>
     <td>
         <div class="flag" title="markiert">&nbsp;&nbsp;</div>
-        <?
+        <?php
         if ($row['pdf']) {
             $datei = substr(strstr($row[3], "_"), 1);
             $datei = substr($datei, 0, strrpos($datei, "."));
@@ -22,7 +22,7 @@
     </td>
     <td>
         Jahr
-        <? $lastone = $years[0];
+        <?php $lastone = $years[0];
         foreach ($years as $year) {
             if ($year['zeit'] < $row['date']) {
                 echo $lastone['jahreszahl'];
@@ -34,12 +34,12 @@
         <?= date("Y:n:j:G:i:s", $row['date']) ?>
     </td>
     <td>
-        <? if ($row['topicture']) : ?>
+        <?php if ($row['topicture']) : ?>
         <div style="background-image: url('file.php?module=matrix&type=MatrixImage&file_id=<?= $row['topicture'] ?>');" class="logo medium">
-        <? endif ?>
-        <? print escape(Forces::id2name($row['toforce'])) ?>
-        <? if ($row['topicture']) : ?>
+        <?php endif ?>
+        <?php print escape(Forces::id2name($row['toforce'])) ?>
+        <?php if ($row['topicture']) : ?>
         </div>
-        <? endif ?>
+        <?php endif ?>
     </td>
 </tr>

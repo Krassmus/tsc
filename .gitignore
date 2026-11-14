@@ -1,0 +1,3 @@
+config.php
+V/tmp/*.sqlite
+V/tmp/pdf_image_*

@@ -5,26 +5,26 @@
 ?>
 <br>
 <select onChange="TSC.matrix.showVersion('<?= $matrix ?>', '<?= escape($page) ?>', this.value);">
-    <? foreach ($versionen as $key => $version) : ?>
-    <option value="<?= escape($version['version']) ?>" title="von <?= Forces::id2name($version['autor_force']) ?> am <?= $version['version'] ?>"<?= $version['version'] == $artikel['version'] ? " selected" : "" ?>>Version <?= count($versionen)-$key ?></option>
-    <? endforeach ?>
+    <?php foreach ($versionen as $key => $version) : ?>
+    <option value="<?= escape($version['version']) ?>" title="von <?= Forces::id2name($version['autor_force']) ?> am <?= $version['version'] ?>"<?= $version['version'] == ($artikel['version'] ?? null) ? " selected" : "" ?>>Version <?= count($versionen)-$key ?></option>
+    <?php endforeach ?>
 </select>
 <h1><?= escape($page) ?></h1>
-<? if ($artikel) : ?>
-    <? if ($additional_data) : ?>
+<?php if ($artikel) : ?>
+    <?php if (!empty($additional_data)) : ?>
     <span class="center" style="letter-spacing: 1.0em;">DATENBLATT</span>
     <table class="fine_table" style="width: 100%;">
         <tbody>
-            <? foreach ($additional_data as $data) : ?>
+            <?php foreach ($additional_data as $data) : ?>
             <tr>
                 <td><?= escape($data[0]) ?></td>
                 <td><?= $data[1] ?></td>
             </tr>
-            <? endforeach ?>
+            <?php endforeach ?>
         </tbody>
     </table>
-    <? endif ?>
-    <? if ($artikel['bild']) :
+    <?php endif ?>
+    <?php if ($artikel['bild']) :
                 $norm = 250;
                 $bild = new MatrixImage(Text::getpic($artikel['bild'], $matrix));
             $image = $bild->getSize();
@@ -44,10 +44,10 @@
 
         ?>
         <img src="file.php?module=matrix&type=MatrixImage&file_id=<?= Text::getpic($artikel['bild'], $matrix) ?>" width="<?= $height ?>" width="<?= $height ?>" class="artikel_avatar">
-    <? endif ?>
+    <?php endif ?>
     <?=
         nl2br($diff);
     ?>
-<? else : ?>
+<?php else : ?>
 Keinen passenden Eintrag gefunden.
-<? endif ?>
+<?php endif ?>

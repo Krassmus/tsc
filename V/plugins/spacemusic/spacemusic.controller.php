@@ -51,7 +51,7 @@ class spacemusic extends Module {
 
     public function action_set_autoplay() {
         global $login;
-        $autoplay = $_REQUEST['autoplay'] ? 1 : 0;
+        $autoplay = !empty($_REQUEST['autoplay']) ? 1 : 0;
         $db = DBManager::get();
         $db->exec(
             "INSERT datafields " .

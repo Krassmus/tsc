@@ -30,11 +30,13 @@ if (isset($_SERVER['SERVER_NAME'])) {
         list($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) =
             explode(':', $_SERVER['SERVER_NAME']);
     }
-    $ABSOLUTE_URI = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+    $is_https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
+    $server_port = $_SERVER['SERVER_PORT'] ?? ($is_https ? 443 : 80);
+    $ABSOLUTE_URI = $is_https ? 'https' : 'http';
     $ABSOLUTE_URI .= '://'.$_SERVER['SERVER_NAME'];
-    if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
-        $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80) {
-        $ABSOLUTE_URI .= ':'.$_SERVER['SERVER_PORT'];
+    if ($is_https && $server_port != 443 ||
+        !$is_https && $server_port != 80) {
+        $ABSOLUTE_URI .= ':'.$server_port;
     }
     $ABSOLUTE_URI .= $CANONICAL_RELATIVE_PATH;
 }
@@ -44,20 +46,27 @@ session_start();
 $db = DBManager::get();
 
 
-if ($_REQUEST['login']) {
+//Salts liegen in config.php (siehe config.draft.php)
+$salt1 = $salt1 ?? "";
+$salt2 = $salt2 ?? "";
+$clean = $clean ?? false;
+
+if (!empty($_REQUEST['login']) && is_string($_REQUEST['login'])) {
     $login = $_SESSION['login'] = $_REQUEST['login'];
 } else {
-    $login = $_SESSION['login'];
+    $login = $_SESSION['login'] ?? "";
 }
-if ($_REQUEST['pass']) {
+if (!empty($_REQUEST['pass']) && is_string($_REQUEST['pass'])) {
     $pass = $_SESSION['pass'] = sha1($salt1.$_REQUEST['pass'].$salt2);
 } else {
-    $pass = $_SESSION['pass'];
+    $pass = $_SESSION['pass'] ?? "";
 }
 
 #Zeichensatz von PHP und der Datenbank einstellen
 $db->query("SET NAMES utf8");
-setlocale(LC_TIME, 'de_DE.UTF8');
+#Der Code stammt aus MySQL-5.1-Zeiten: Strict-Mode und ONLY_FULL_GROUP_BY wuerden viele Abfragen abbrechen
+$db->query("SET SESSION sql_mode = 'NO_ENGINE_SUBSTITUTION'");
+setlocale(LC_TIME, 'de_DE.UTF-8');
 
 #Ueberpruefen der Zugangsdaten
 $result = $db->query("SELECT password " .
@@ -70,7 +79,7 @@ if (!$result) {
     header("Location: ../index.php?fehler=1");
     die();
 }
-if ($result['password'] != $pass) {
+if (!hash_equals((string) $result['password'], (string) $pass)) {
     //  die("Falsches Passwort.");
     header("Location: ../index.php?fehler=2");
     die();

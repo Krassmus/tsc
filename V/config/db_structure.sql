@@ -34,7 +34,11 @@ CREATE TABLE bilder (
   matrix int(11) DEFAULT NULL,
   autor_force_id int(11) DEFAULT NULL,
   beschreibung text,
-  date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  mime_type char(100) DEFAULT NULL,
+  width int(11) DEFAULT NULL,
+  height int(11) DEFAULT NULL,
+  content longblob,
+  date int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) AUTO_INCREMENT=5 ;
 
@@ -53,13 +57,13 @@ CREATE TABLE contact (
 
 
 CREATE TABLE `datafields` (
-  `table` varchar(128) NOT NULL,
-  `field` varchar(128) NOT NULL,
-  `id` bigint(20) NOT NULL,
+  `db_table` varchar(64) NOT NULL,
+  `field` varchar(64) NOT NULL,
+  `id` varchar(64) NOT NULL,
   `value` text NOT NULL,
   `mkdate` bigint(20) NOT NULL,
   `chdate` bigint(20) NOT NULL,
-  PRIMARY KEY (`table`,`field`,`id`)
+  PRIMARY KEY (`db_table`,`field`,`id`)
 ) ENGINE=MyISAM;
 
 
@@ -71,6 +75,7 @@ CREATE TABLE forces (
   id int(11) NOT NULL AUTO_INCREMENT,
   name char(40) DEFAULT NULL,
   picture int(11) DEFAULT NULL,
+  lastsignoflife int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) AUTO_INCREMENT=3 ;
 
@@ -147,7 +152,7 @@ CREATE TABLE live_messages (
   content text,
   from_force int(11) DEFAULT NULL,
   to_force int(11) DEFAULT NULL,
-  date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  date int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) AUTO_INCREMENT=1 ;
 
@@ -163,7 +168,8 @@ CREATE TABLE matrix (
   version timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   autor_force int(11) DEFAULT NULL,
   gruppe int(11) DEFAULT NULL,
-  bild char(100) DEFAULT NULL
+  bild char(100) DEFAULT NULL,
+  FULLTEXT KEY eintrag (eintrag)
 );
 
 -- --------------------------------------------------------
@@ -175,11 +181,14 @@ CREATE TABLE matrix (
 CREATE TABLE messages (
   id int(11) NOT NULL AUTO_INCREMENT,
   fromforce int(11) DEFAULT NULL,
-  date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  date int(11) NOT NULL DEFAULT '0',
   content text,
   frompicture int(11) DEFAULT NULL,
   pdf tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (id)
+  pdf_title char(100) DEFAULT NULL,
+  pdf_content longblob,
+  PRIMARY KEY (id),
+  FULLTEXT KEY content (content)
 ) AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
@@ -192,7 +201,7 @@ CREATE TABLE pdfdocs (
   id int(11) NOT NULL AUTO_INCREMENT,
   filename char(100) DEFAULT NULL,
   autor_force_id int(11) DEFAULT NULL,
-  date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  date int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) AUTO_INCREMENT=1 ;
 
@@ -228,7 +237,9 @@ CREATE TABLE relate_messages (
   ms_id int(11) DEFAULT NULL,
   toforce int(11) DEFAULT NULL,
   yet_read tinyint(1) DEFAULT NULL,
-  topicture int(11) DEFAULT NULL
+  topicture int(11) DEFAULT NULL,
+  flag int(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY message_receiver (ms_id, toforce)
 );
 
 -- --------------------------------------------------------
@@ -260,6 +271,8 @@ CREATE TABLE spieler (
   headerfontsize int(11) DEFAULT NULL,
   fontsize int(11) DEFAULT NULL,
   titlealert tinyint(1) DEFAULT '1',
+  width int(11) DEFAULT NULL,
+  locked tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (login),
   UNIQUE KEY login (login)
 );
@@ -272,7 +285,7 @@ CREATE TABLE spieler (
 
 CREATE TABLE year (
   gruppe int(11) NOT NULL,
-  zeit timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  zeit int(11) NOT NULL DEFAULT '0',
   jahreszahl int(11) DEFAULT NULL
 );
 
@@ -286,4 +299,18 @@ CREATE TABLE years (
   gruppe int(11) DEFAULT NULL,
   year int(11) DEFAULT NULL,
   date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur fuer Tabelle `module_groups`
+--
+
+CREATE TABLE module_groups (
+  modulename varchar(64) NOT NULL,
+  type varchar(16) NOT NULL DEFAULT 'controller',
+  gruppe_id int(11) NOT NULL,
+  position int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (gruppe_id, modulename)
 );

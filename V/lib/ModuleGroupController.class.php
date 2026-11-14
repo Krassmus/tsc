@@ -3,6 +3,8 @@
 require_once dirname(__file__)."/ModuleController.class.php";
 
 class ModuleGroupController extends ModuleController {
+
+    protected $group = null;
     
     public function __construct() {
         parent::__construct();
@@ -17,9 +19,9 @@ class ModuleGroupController extends ModuleController {
     
     public function activateAction($action) {
         $group = $this->getGroup();
-        if ($_REQUEST['group']
+        if (!empty($_REQUEST['group'])
                 OR !in_array($action, $this->framedActions())) {
-            $this->group = count($group) === 1 ? $group[0]['id'] : $_REQUEST['group'];
+            $this->group = count($group) === 1 ? $group[0]['id'] : ($_REQUEST['group'] ?? null);
             parent::activateAction($action);
         } else {
             ob_start();

@@ -1,8 +1,8 @@
 <div id="matrix_image_canvas">
 
 <div id="matrix_image_container">
-<? foreach ($images as $image) : ?>
-    <?
+<?php foreach ($images as $image) : ?>
+    <?php
     $norm = 100;
     $width = $image['width'] ? $image['width'] : $norm;
     $height = $image['height'] ? $image['height'] : $norm;
@@ -28,7 +28,7 @@
               "
 	   onClick="TSC.matrix.showImageDetails('<?= $image['id'] ?>')">
     </a>
-<? endforeach ?>
+<?php endforeach ?>
 </div>
 
 <div class="matrix_uploader">
@@ -40,9 +40,9 @@
     </div>
     <div style="margin-bottom: 10px;">
         <select name="force_id" id="matrix_pictureupload_force_id" onChange="TSC.matrix.initUpload();">
-            <? foreach ($force as $f) : ?>
+            <?php foreach ($force as $f) : ?>
             <option value="<?= $f ?>"><?= Forces::id2name($f) ?></option>
-            <? endforeach ?>
+            <?php endforeach ?>
         </select>
     </div>
 </div>

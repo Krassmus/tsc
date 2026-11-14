@@ -13,7 +13,7 @@ class Text {
   
     static public function format($text, $aspects = array("general")) {
         $replacement = sha1("LONGSNAKE".time())."_".md5("LONGSNAKE".time());
-        $text = str_replace("~", $replacement, $text);
+        $text = str_replace("~", $replacement, (string) $text);
         $text = self::escape($text);
 
         self::$depth = 1;
@@ -68,7 +68,7 @@ class Text {
     }
 
     static public function escape($text) {
-        return htmlentities($text, ENT_COMPAT, 'UTF-8');
+        return htmlentities((string) $text, ENT_COMPAT, 'UTF-8');
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -134,6 +134,7 @@ class Text {
         $invisible = false;
         $active = false;
         $active_row = false;
+        $active_col = false;
         $header = false;
         $center = false;
         $close = false;
@@ -282,15 +283,15 @@ class Text {
             $listtext[$i] = substr($listtext[$i], 1);
         for ($i=0; $i < count($listtext); $i++)
         {
-            if ($listtext[$i][0] != "-")
+            if (substr($listtext[$i] ?? '', 0, 1) != "-")
             {
-                if ($listtext[$i][0] != "+")
+                if (substr($listtext[$i] ?? '', 0, 1) != "+")
                 {
                     $text .= "<li>".$listtext[$i];
                 } else {
                     $new_num = $listtext[$i];
                     $i++;
-                    while ($listtext[$i][0] == "+")
+                    while (substr($listtext[$i] ?? '', 0, 1) == "+")
                     {
                         $new_num .= "\n".$listtext[$i];
                         $i++;
@@ -301,7 +302,7 @@ class Text {
             } else {
                 $new_list = $listtext[$i];
                 $i++;
-                while ($listtext[$i][0] == "-")
+                while (substr($listtext[$i] ?? '', 0, 1) == "-")
                 {
                     $new_list .= "\n".$listtext[$i];
                     $i++;
@@ -327,15 +328,15 @@ class Text {
             $numtext[$i] = substr($numtext[$i], 1);
         for ($i=0; $i < count($numtext); $i++)
         {
-            if ($numtext[$i][0] != "+")
+            if (substr($numtext[$i] ?? '', 0, 1) != "+")
             {
-                if ($numtext[$i][0] != "-")
+                if (substr($numtext[$i] ?? '', 0, 1) != "-")
                 {
                     $text .= "<li>".$numtext[$i];
                 } else {
                     $new_list = $numtext[$i];
                     $i++;
-                    while ($numtext[$i][0] == "-")
+                    while (substr($numtext[$i] ?? '', 0, 1) == "-")
                     {
                         $new_list .= "\n".$numtext[$i];
                         $i++;
@@ -346,7 +347,7 @@ class Text {
             } else {
                 $new_num = $numtext[$i];
                 $i++;
-                while ($numtext[$i][0] == "+")
+                while (substr($numtext[$i] ?? '', 0, 1) == "+")
                 {
                     $new_num .= "\n".$numtext[$i];
                     $i++;
@@ -491,7 +492,7 @@ class Text {
             },
             $text
         );
-        $text = preg_replace("/\[img\](\w[\w|\.|\-%]+)/",
+        $text = preg_replace_callback("/\[img\](\w[\w|\.|\-%]+)/",
             function ($match) {
                 return "<img src=" . '"' . "tmp/pdf_image_".Text::getpic($match[1]). '"' . ">";
             },
@@ -504,7 +505,7 @@ class Text {
     static protected function special_format_wikilinks($text) {
         global $gruppe;
         $db = DBManager::get();
-        if ($_REQUEST['group'] && $gruppe->has($_REQUEST['group'])) {
+        if (!empty($_REQUEST['group']) && $gruppe->has($_REQUEST['group'])) {
             $gruppen_array = $db->quote($_REQUEST['group']);
         } else {
             $gruppen_array = "";
@@ -513,7 +514,7 @@ class Text {
                 $gruppen_array .= $db->quote($g);
             }
         }
-        $title = $_REQUEST['artikel'] && $_REQUEST['artikel'] !== "SUCHMASKE" ? $_REQUEST['artikel'] : null;
+        $title = !empty($_REQUEST['artikel']) && $_REQUEST['artikel'] !== "SUCHMASKE" ? $_REQUEST['artikel'] : null;
         $result = $db->query(
             "SELECT DISTINCT name, gruppe " .
             "FROM matrix " .

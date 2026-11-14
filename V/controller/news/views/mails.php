@@ -10,14 +10,14 @@
     </div>
 	<div>
         <select id="news_year_selected" onChange="TSC.news.cleanBoxes(); $('#news_eingang').is(':visible') ? TSC.news.showInbox() : TSC.news.showOutbox();">
-            <? 
+            <?php 
             for ($i = 0; $i <= $maximum - $minimum; $i++) {
                 $schongeschrieben = false;
                 print '<option value="'.$i.'"'.(($jahresauswahl == $i) ? " selected" : "").'>';
                 for ($j=0; $j < count($gruppe); $j++) {
                     if (!$schongeschrieben) print "Jahr ";
                     if ($schongeschrieben) print " / ";
-                    print $group_year[$j]['jahreszahl']-$i;
+                    print ($group_year[$j]['jahreszahl'] ?? 0)-$i;
                     $schongeschrieben = true;
                 }
                 print '</option>';
@@ -51,9 +51,9 @@
         <th>Von</th>
         <th>Nachricht</th>
         <th>Datum</th>
-        <? if (count($force) > 1) : ?>
+        <?php if (count($force) > 1) : ?>
         <th>Nach</th>
-        <? endif ?>
+        <?php endif ?>
     </thead>
     <tbody>
     </tbody>
@@ -61,9 +61,9 @@
 
 <table id="news_ausgang" class="fine_table" style="display: none;">
     <thead>
-        <? if (count($force) > 1) : ?>
+        <?php if (count($force) > 1) : ?>
         <th>Von</th>
-        <? endif ?>
+        <?php endif ?>
         <th>Nachricht</th>
         <th>Datum</th>
         <th>Nach</th>

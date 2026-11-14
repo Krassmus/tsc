@@ -101,11 +101,14 @@ class matrix extends ModuleGroupController {
     
     public function action_pages() {
         global $db, $masterof;
-        if ($_REQUEST['artikel'] === "SUCHMASKE") {
+        if (($_REQUEST['artikel'] ?? null) === "SUCHMASKE") {
             $this->suchmaske();
             return;
         }
-        $page = $_REQUEST['artikel'] OR $page = Groups::id2name($this->group);
+        $page = $_REQUEST['artikel'] ?? '';
+        if ($page === '') {
+            $page = Groups::id2name($this->group);
+        }
         $versionen = $db->query(
             "SELECT version, autor_force " .
             "FROM matrix " .
@@ -134,10 +137,12 @@ class matrix extends ModuleGroupController {
     }
 
     public function action_version() {
-        $masterof;
         $db = DBManager::get();
-        $page = $_REQUEST['artikel'] OR $page = Groups::id2name($this->group);
-        $version = $_REQUEST['version'];
+        $page = $_REQUEST['artikel'] ?? '';
+        if ($page === '') {
+            $page = Groups::id2name($this->group);
+        }
+        $version = $_REQUEST['version'] ?? 0;
         $artikel = $db->query(
             "SELECT * " .
             "FROM matrix " .
@@ -161,7 +166,7 @@ class matrix extends ModuleGroupController {
             "ORDER BY version DESC " .
             "LIMIT 1, 1 " . //also den vorletzten Eintrag in der Matrix
         "")->fetch(PDO::FETCH_COLUMN, 0);
-        $diff = $this->htmlDiff($artikel['eintrag'], $old_version ? $old_version : "");
+        $diff = $this->htmlDiff($artikel['eintrag'] ?? '', $old_version ? $old_version : "");
         print Template::summon(dirname(__file__)."/views/version.php")
                     ->with('page', $page)
                     ->with('breadcrumb', $this->lastPages())
@@ -173,6 +178,9 @@ class matrix extends ModuleGroupController {
     }
 
     protected function diff($old, $new){
+        $matrix = array();
+        $maxlen = 0;
+        $omax = $nmax = 0;
         foreach($old as $oindex => $ovalue){
             $nkeys = array_keys($new, $ovalue);
                 foreach($nkeys as $nindex){
@@ -193,7 +201,8 @@ class matrix extends ModuleGroupController {
     }
 
     protected function htmlDiff($old, $new){
-        $diff = $this->diff(explode(' ', $old), explode(' ', $new));
+        $diff = $this->diff(explode(' ', (string) $old), explode(' ', (string) $new));
+        $ret = '';
         foreach($diff as $k) {
             if(is_array($k)) {
                 $ret .= (!empty($k['d'])?"<ins>".implode(' ',$k['d'])."</ins> ":'').
@@ -215,7 +224,8 @@ class matrix extends ModuleGroupController {
             "ORDER BY MAX(version) DESC " .
             "LIMIT 20 " .
         "")->fetchAll(PDO::FETCH_COLUMN, 0);
-        if ($_REQUEST['letter']) {
+        $results = array();
+        if (!empty($_REQUEST['letter'])) {
             $letter = strtolower($_REQUEST['letter']);
             if ($letter === "#") {
                 $results = $db->query(
@@ -235,7 +245,7 @@ class matrix extends ModuleGroupController {
                     "ORDER BY name ASC " .
                 "")->fetchAll(PDO::FETCH_COLUMN, 0);
             }
-        } elseif($_REQUEST['suche']) {
+        } elseif(!empty($_REQUEST['suche'])) {
             $results = $db->query(
                 "SELECT DISTINCT name " .
                 "FROM matrix " .
@@ -294,18 +304,21 @@ class matrix extends ModuleGroupController {
     public function action_save_article() {
         global $force;
         $db = DBManager::get();
-        if (!$force->has($_REQUEST['autor'])) {
+        $_REQUEST['bild'] = $_REQUEST['bild'] ?? '';
+        if (!$force->has($_REQUEST['autor'] ?? null)) {
             throw new Exception("Falsche Macht ist am Werke!");
-            return;
         }
-        if (($_REQUEST['content']) && ($_REQUEST['title']) && ($_REQUEST['autor']) && ($this->group)) {
+        if (!empty($_REQUEST['content']) && !empty($_REQUEST['title']) && !empty($_REQUEST['autor']) && $this->group) {
             $row = $db->query(
-                "SELECT CURRENT_TIMESTAMP - version, autor_force, name, gruppe " .
+                "SELECT TIMESTAMPDIFF(SECOND, version, CURRENT_TIMESTAMP) AS age, autor_force, name, gruppe " .
                 "FROM matrix " .
+                "WHERE name = ".$db->quote($_REQUEST['title'])." " .
+                    "AND gruppe = ".$db->quote($this->group)." " .
                 "ORDER BY version DESC " .
                 "LIMIT 1 " .
             "")->fetch();
-            if (($row['autor_force'] == $_REQUEST['autor']) && ($row[0] < 3*3600) && ($row['name'] == $_REQUEST['title']) && ($row['gruppe'] == $_REQUEST['group'])) {
+            //Wer innerhalb von 3 Stunden erneut speichert, ueberschreibt seine letzte Version
+            if ($row && ($row['autor_force'] == $_REQUEST['autor']) && ($row['age'] < 3*3600)) {
                 $db->query("UPDATE matrix SET " .
                         "eintrag = ".$db->quote($_REQUEST['content']).", " .
                         "bild = ".$db->quote($_REQUEST['bild']).", " .
@@ -339,9 +352,11 @@ class matrix extends ModuleGroupController {
             $query = "DELETE FROM matrix WHERE name = ".$db->quote($_REQUEST['page'])." AND gruppe = ".$db->quote($this->group);
             $db->exec($query);
             //Und noch die History bereinigen.
-            $_SESSION["lastPages"][$this->group] 
-                    = array_filter($_SESSION["lastPages"][$this->group], 
-                                    create_function('$a','return $a !== "'.addslashes($_REQUEST['page']).'";'));
+            $_SESSION["lastPages"][$this->group]
+                    = array_values(array_filter($_SESSION["lastPages"][$this->group] ?? array(),
+                                    function ($a) {
+                                        return $a !== $_REQUEST['page'];
+                                    }));
         } else {
             throw new Exception ("Sie dürfen diesen Artikel nicht löschen.");
         }
@@ -382,7 +397,7 @@ class matrix extends ModuleGroupController {
         //Dafür ist die einfach zu dick.
         include_once dirname(__file__)."/classes/PDF.class.php";
         $db = DBManager::get();
-        $part = (int) $_REQUEST['part'] ? $_REQUEST['part'] : 1;
+        $part = max(1, (int) ($_REQUEST['part'] ?? 1));
         $articles = $db->query(
             "SELECT " .
                 "m.name, " .
@@ -392,7 +407,7 @@ class matrix extends ModuleGroupController {
             "FROM matrix AS m " .
             "WHERE m.gruppe = ".$db->quote($this->group)." " .
             //    "AND m.name = 'Perenna' " .
-            "GROUP BY m.name ASC LIMIT ".addslashes(($part-1)*50).", ".addslashes($part*50)." " .
+            "GROUP BY m.name ASC LIMIT ".(($part-1)*50).", 50 " .
         "")->fetchAll();
 
         $images = $db->query(
@@ -431,6 +446,12 @@ class matrix extends ModuleGroupController {
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         //set some language-dependent strings
+        $l = array(
+            'a_meta_charset' => 'UTF-8',
+            'a_meta_dir' => 'ltr',
+            'a_meta_language' => 'de',
+            'w_page' => 'Seite'
+        );
         $pdf->setLanguageArray($l);
 
         // ---------------------------------------------------------
@@ -455,8 +476,9 @@ class matrix extends ModuleGroupController {
                 $norm = 300;
                 $bild = new MatrixImage(Text::getpic($article['bild'], $this->group));
                 $image = $bild->getSize();
-                $width = $image['width'] ? $image['width'] : $norm;
-                $height = $image['height'] ? $image['height'] : $norm;
+                $image = $image[0] ?? array();
+                $width = !empty($image['width']) ? $image['width'] : $norm;
+                $height = !empty($image['height']) ? $image['height'] : $norm;
                 /*if ($width > $height) {
                     if ($height > $norm) {
                         $width = floor($width * $norm / $height);
@@ -477,7 +499,7 @@ class matrix extends ModuleGroupController {
             $pdf->writeHTML($html, true, false, true, false, '');
 
             $pdf->SetFont('ocraext', '', 10);
-            $html = Text::pdf_format($article['eintrag'], $article['name'], $this->group);
+            $html = Text::pdf_format((string) $article['eintrag'], $article['name'], $this->group);
             $super_html .= $html;
             //print $html;
             $pdf->writeHTML($html, true, false, true, false, '');
@@ -519,10 +541,10 @@ class matrix extends ModuleGroupController {
     }
     
     private function lastPages($page = null) {
-        if (!$_SESSION["lastPages"]) {
+        if (empty($_SESSION["lastPages"])) {
             $_SESSION["lastPages"] = array();
         }
-        if (!$_SESSION["lastPages"][$this->group]) {
+        if (empty($_SESSION["lastPages"][$this->group])) {
             $_SESSION["lastPages"][$this->group] = array("SUCHMASKE");
         }
         if ($page) {

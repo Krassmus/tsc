@@ -4,7 +4,7 @@ require_once dirname(__file__)."/Module.class.php";
 
 class FileInclude {
     
-    static $headelements = array();
+    static $headelements = array('predef' => '');
     static $headercolor = array(
         0 => array(
             'color' => "#FFAD00",
@@ -15,8 +15,8 @@ class FileInclude {
             'name' => "Blau"
         ),
         2 => array(
-            'color' => "#FFAD00",
-            'name' => "#5CFF58"
+            'color' => "#5CFF58",
+            'name' => "Grün"
         )
     );
     

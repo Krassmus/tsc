@@ -12,7 +12,7 @@ class Groups extends Items {
   
     static function playersGroups($spieler) {
   	$db = DBManager::get();
-        $pG = new Forces();
+        $pG = new Groups();
         $result = $db->query("SELECT DISTINCT g.gruppe_id " .
           "FROM relate_f_gr AS g " .
               "INNER JOIN relate_sp_f AS f ON (f.force_id = g.force_id) " .
@@ -25,7 +25,7 @@ class Groups extends Items {
   
     static function mastersGroups($spieler) {
         $db = DBManager::get();
-        $pG = new Forces();
+        $pG = new Groups();
         $result = $db->query("SELECT DISTINCT m.gruppe_id " .
             "FROM relate_master_gr AS m " .
             "WHERE m.spieler = ".$db->quote($spieler))->fetchAll();

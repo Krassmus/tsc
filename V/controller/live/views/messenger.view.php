@@ -1,21 +1,21 @@
 <h1>Schnellnachrichten</h1>
 
 <div class="messenger">
-    <? if (count($force) > 1) : ?>
+    <?php if (count($force) > 1) : ?>
     <div class="center" style="margin-bottom: 10px;">
         <label>
             Anwesend als
             <select id="live_onlineas" onChange="TSC.live.change_as_online(this.value);" style="vertical-align: middle;">
                 <option value="">niemand</option>
-                <? foreach ($force as $f) : ?>
-                <option value="<?= $f ?>"<?= $online_as === $f ? " selected" : "" ?>><?= escape(Forces::id2name($f)) ?></option>
-                <? endforeach ?>
+                <?php foreach ($force as $f) : ?>
+                <option value="<?= $f ?>"<?= $online_as == $f ? " selected" : "" ?>><?= escape(Forces::id2name($f)) ?></option>
+                <?php endforeach ?>
             </select>
         </label>
     </div>
-    <? else : ?>
+    <?php else : ?>
     <input type="hidden" id="live_onlineas" value="<?= $force[0] ?>">
-    <? endif ?>
+    <?php endif ?>
     <div id="live_contact_container">
         <div>Anwesend ist:
             <ul id="live_contacts">

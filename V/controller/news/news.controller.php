@@ -109,6 +109,9 @@ class news extends ModuleController {
             "WHERE relate_sp_f.spieler = ".$db->quote($login)." " .
                 "AND messages.frompicture IS NULL " .
         "")->fetch(PDO::FETCH_ASSOC);
+        if (!$old_news) {
+            $old_news = array('id' => '', 'content' => '', 'pdf' => 0);
+        }
         print Template::summon(dirname(__file__)."/views/composer.php")
                     ->with('forces', $force)
                     ->with('adressees', $adressees)
@@ -119,13 +122,13 @@ class news extends ModuleController {
     public function action_save() {
         global $force;
         $db = DBManager::get();
-        if ($_REQUEST['content'] && $_REQUEST['fromforce'] && $force->has($_REQUEST['fromforce'])) {
+        if (!empty($_REQUEST['content']) && !empty($_REQUEST['fromforce']) && $force->has($_REQUEST['fromforce'])) {
             $set =
                 "SET content = ".$db->quote($_REQUEST['content']).", " .
                     "fromforce = ".$db->quote($_REQUEST['fromforce']).", " .
                     "pdf = '0' " .
                 "";
-            if ($_REQUEST['message_id']) {
+            if (!empty($_REQUEST['message_id'])) {
                 $db->exec(
                     "UPDATE messages " .
                     $set .
@@ -143,26 +146,26 @@ class news extends ModuleController {
     }
 
     public function action_upload_pdf() {
-        $new_file = new NewsPDF($_REQUEST['message_id'] ? $_REQUEST['message_id'] : null);
+        $new_file = new NewsPDF(!empty($_REQUEST['message_id']) ? $_REQUEST['message_id'] : null);
         $new_file->upload();
     }
     
     public function action_send() {
         global $force;
         $db = DBManager::get();
-        if ($_REQUEST['fromforce'] && $force->has($_REQUEST['fromforce']) && is_array($_REQUEST['adressees'])) {
+        if (!empty($_REQUEST['fromforce']) && $force->has($_REQUEST['fromforce']) && isset($_REQUEST['adressees']) && is_array($_REQUEST['adressees'])) {
             $picture = Forces::forcespicture($_REQUEST['fromforce']);
             $set =
                 "SET fromforce = ".$db->quote($_REQUEST['fromforce']).", " .
                     "date = ".$db->quote(time()).", " .
-                    "frompicture = ".$db->quote($picture['id']).", " .
-                    ($_REQUEST['pdf'] && $_REQUEST['message_id']
+                    "frompicture = ".$db->quote((string) $picture['id']).", " .
+                    (!empty($_REQUEST['pdf']) && !empty($_REQUEST['message_id'])
                         ?   "pdf = '1' "
                         :   "pdf = '0', " .
-                            "content = ".$db->quote($_REQUEST['content'])." "
+                            "content = ".$db->quote($_REQUEST['content'] ?? '')." "
                             ) .
                 "";
-            if ($_REQUEST['message_id']) {
+            if (!empty($_REQUEST['message_id'])) {
                 $db->exec(
                     "UPDATE messages " .
                     $set .
@@ -189,7 +192,7 @@ class news extends ModuleController {
                         "SET ms_id = ".$db->quote($id).", " .
                             "toforce = ".$db->quote($receiver).", " .
                             "yet_read = '0', " .
-                            "topicture = ".$db->quote($picture['id'])." " .
+                            "topicture = ".$db->quote((string) $picture['id'])." " .
                     "");
                 }
             }
@@ -200,7 +203,7 @@ class news extends ModuleController {
         global $login, $force, $gruppe;
         $db = DBManager::get();
         $maximum = 0;
-        $jahresauswahl = $_REQUEST['jahresauswahl'] ? $_REQUEST['jahresauswahl'] : 0;
+        $jahresauswahl = (int) ($_REQUEST['jahresauswahl'] ?? 0);
         $group_year = $db->query(
             "SELECT year.gruppe, MAX(year.zeit) as zeit, MAX(year.jahreszahl) as jahreszahl, MIN(year.jahreszahl) AS startjahr " .
             "FROM year " .
@@ -210,14 +213,14 @@ class news extends ModuleController {
             "GROUP BY year.gruppe " .
             "ORDER BY jahreszahl DESC " .
         "")->fetchAll();
-        $maximum = $group_year[0]['jahreszahl'];
+        $maximum = $group_year[0]['jahreszahl'] ?? 0;
         $minimum = $maximum;
         foreach ($group_year as $row) {
             $minimum = ($minimum > $row['startjahr']) ? $row['startjahr'] : $minimum;
         }
         
         print Template::summon(dirname(__file__)."/views/mails.php")
-                    ->with("years", $years)
+                    ->with("force", $force)
                     ->with("forces", $force)
                     ->with("gruppe", $gruppe)
                     ->with("maximum", $maximum)
@@ -230,7 +233,8 @@ class news extends ModuleController {
     public function action_get_mails() {
         global $login, $force;
         $db = DBManager::get();
-        $jahresauswahl = $_REQUEST['year'];
+        $jahresauswahl = max(0, (int) ($_REQUEST['year'] ?? 0));
+        $latest_date = $_REQUEST['latest_date'] ?? 0;
         $data = array('inbox' => array(), 'outbox' => array());
         $inbox = $db->query(
             "SELECT DISTINCT m.id, m.fromforce, m.date, m.content, r.toforce, r.yet_read, r.flag, m.frompicture, r.topicture, m.pdf " .
@@ -241,12 +245,12 @@ class news extends ModuleController {
                 "INNER JOIN relate_master_gr AS ma ON (ma.gruppe_id = g.gruppe_id) " .
             "WHERE " .
                 "date > IF(".
-                        $db->quote($_REQUEST['latest_date'])." > (SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".addslashes($jahresauswahl).", 1), ".
-                        $db->quote($_REQUEST['latest_date']).", " .
-                        "(SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".addslashes($jahresauswahl).", 1)" .
+                        $db->quote($latest_date)." > (SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".$jahresauswahl.", 1), ".
+                        $db->quote($latest_date).", " .
+                        "(SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".$jahresauswahl.", 1)" .
                         ")".
                     (($jahresauswahl > 0) 
-                        ? "AND date < (SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".addslashes($jahresauswahl-1).", 1) " 
+                        ? "AND date < (SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".($jahresauswahl-1).", 1) " 
                         : "" ) .
                 "AND (f.spieler = ".$db->quote($login)." OR ma.spieler = ".$db->quote($login).") " .
                 "ORDER BY m.date ASC " . 
@@ -270,12 +274,12 @@ class news extends ModuleController {
                 "INNER JOIN relate_messages AS r ON (r.ms_id = m.id) " .
             "WHERE " .
                 "date > IF(".
-                        $db->quote($_REQUEST['latest_date'])." > (SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".addslashes($jahresauswahl).", 1), ".
-                        $db->quote($_REQUEST['latest_date']).", " .
-                        "(SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".addslashes($jahresauswahl).", 1)" .
+                        $db->quote($latest_date)." > (SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".$jahresauswahl.", 1), ".
+                        $db->quote($latest_date).", " .
+                        "(SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".$jahresauswahl.", 1)" .
                         ")".
                     (($jahresauswahl > 0) 
-                        ? "AND date < (SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".addslashes($jahresauswahl-1).", 1) " 
+                        ? "AND date < (SELECT zeit FROM year WHERE gruppe = g.gruppe_id ORDER BY zeit DESC LIMIT ".($jahresauswahl-1).", 1) " 
                         : "" ) .
                 "AND (f.spieler = ".$db->quote($login).") " . //keine Spielleitersache
                 "GROUP BY m.id " .
@@ -312,12 +316,16 @@ class news extends ModuleController {
             ") " .
                 "AND m.id = ".$db->quote($_REQUEST['message_id'])." " .
         "")->fetch();
+        if (!$mail) {
+            throw new Exception("Nachricht nicht gefunden oder keine Berechtigung.");
+        }
         $group = $db->query(
             "SELECT gruppe_id FROM relate_f_gr WHERE force_id = ".$db->quote($mail['fromforce'])." " .
         "")->fetch(PDO::FETCH_COLUMN, 0);
         print Template::summon(dirname(__file__)."/views/one_mail.php")
                     ->with("mail", $mail)
-                    ->with("group", $gruppe)
+                    ->with("group", $group)
+                    ->with("depth", 0)
                     ->render();
         if ($force->has($mail['toforce'])) {
             $db->exec(
@@ -335,7 +343,7 @@ class news extends ModuleController {
         global $login, $force;
         $db = DBManager::get();
         $data = array('results' => array());
-        if (strlen($_REQUEST['search']) > 3) {
+        if (strlen($_REQUEST['search'] ?? '') > 3) {
             $forces = $db->query(
                 "SELECT f.force_id " .
                 "FROM relate_sp_f AS f " .

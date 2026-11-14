@@ -1,24 +1,24 @@
 <div style="margin-top: 20px; margin-bottom:20px; text-align: center;">
 
-<? if (count($forces) > 1) : ?>
+<?php if (count($forces) > 1) : ?>
 <select id="sent_by_force" onChange="$('div[id^=news_composer_adressees_]:visible').fadeOut(function () { $('#news_composer_adressees_'+$('#sent_by_force').val()).fadeIn(); }); TSC.news.initUpload();">
-<? foreach ($forces as $force) : ?>
+<?php foreach ($forces as $force) : ?>
 	<option value="<?= $force ?>"><?= Forces::id2name($force) ?></option>
-<? endforeach ?>
+<?php endforeach ?>
 </select>
-<? else : ?>
+<?php else : ?>
 <input type="hidden" id="sent_by_force" value="<?= $forces[0] ?>">
-<? endif ?>
+<?php endif ?>
 
-<? foreach ($forces as $key => $force) : ?>
+<?php foreach ($forces as $key => $force) : ?>
 <div style="<?= $key > 0 ? "display: none; " : "" ?>" id="news_composer_adressees_<?= $force ?>">
 	<select multiple="multiple" id="news_composer_adressee_of_<?= $force ?>" name="adressee[<?= $force ?>][]" style="width: 50%; height: 100px;">
-	<? foreach ($adressees[$force] as $adressee) : ?>
+	<?php foreach ($adressees[$force] as $adressee) : ?>
 		<option value="<?= $adressee ?>"><?= Forces::id2name($adressee) ?></option>
-	<? endforeach ?>
+	<?php endforeach ?>
 	</select>
 </div>
-<? endforeach ?>
+<?php endforeach ?>
 
 <input type="hidden" id="news_composer_message_id" name="message_id" value="<?= $old_news['id'] ?>">
 

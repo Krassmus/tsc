@@ -1,6 +1,6 @@
 <?php
 
-header('Content-type: text/json');
+header('Content-Type: application/json; charset=UTF-8');
 require_once dirname(__file__)."/security.php";
 
 $new_things = array();
@@ -11,7 +11,7 @@ foreach($modules as $mod) {
     
     $data = $mod->sendData();
     if ($data !== null) {
-        $new_things[$modname]['data'] = $mod->sendData();
+        $new_things[$modname]['data'] = $data;
     }
     
     if (method_exists($mod, "getTitle")) {
@@ -20,4 +20,4 @@ foreach($modules as $mod) {
 }
 
 //if this does not work, we may have utf8+bom encoded files
-print JSON_encode($new_things);
+print json_encode($new_things);

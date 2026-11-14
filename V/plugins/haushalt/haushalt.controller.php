@@ -42,6 +42,7 @@ class haushalt extends ModuleController {
     public function action_control() {
         if (!count($GLOBALS['masterof'])) {
             echo "Kein Zugriff";
+            return;
         }
         global $login;
         $db = DBManager::get();
@@ -54,7 +55,7 @@ class haushalt extends ModuleController {
             "GROUP BY year.gruppe " .
             "ORDER BY jahreszahl DESC" .
         "")->fetch(PDO::FETCH_ASSOC);
-        $jahr = $group_year['jahreszahl'];
+        $jahr = $group_year['jahreszahl'] ?? null;
         $colonies = array();
         foreach ($GLOBALS['masterof'] as $group) {
             $colonies[$group] = $db->query(
@@ -72,8 +73,10 @@ class haushalt extends ModuleController {
     }
 	
     public function action_edit_ip() {
-        if (!count($GLOBALS['masterof']) OR !$masterof->has($_REQUEST['gruppe_id'])) {
+        global $masterof;
+        if (!count($masterof) OR !$masterof->has($_REQUEST['gruppe_id'] ?? null)) {
                 echo "Kein Zugriff";
+                return;
         }
     }
 }

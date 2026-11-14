@@ -1,5 +1,5 @@
 <h1><?= escape($image['filename']) ?></h1>
-<?
+<?php
 $norm = 600;
 $width = $image['width'] ? $image['width'] : $norm;
 $height = $image['height'] ? $image['height'] : $norm;
@@ -31,16 +31,16 @@ if ($width > $height) {
                     <pre>[img]<?= $image['id'] ?></pre>
                 </td>
             </tr>
-			<? if (is_array($matrixseiten) && count($matrixseiten)) : ?>
+			<?php if (is_array($matrixseiten) && count($matrixseiten)) : ?>
 			<tr>
 				<td>Verwendet von</td>
 				<td><ul>
-					<? foreach ($matrixseiten as $page) : ?>
+					<?php foreach ($matrixseiten as $page) : ?>
 					<li><a onClick="TSC.matrix.openArticle('<?= $page['gruppe'] ?>', '<?= Text::escape(str_replace("'", "%HOCHKOMMA%", str_replace(" ", "%20", $page['name']))) ?>');"><?= Text::escape($page['name']) ?></a></li>
-					<? endforeach ?>
+					<?php endforeach ?>
 				</ul></td>
 			</tr>
-			<? endif ?>
+			<?php endif ?>
             <tr>
                 <td>Aktionen</td>
                 <td>
@@ -51,7 +51,7 @@ if ($width > $height) {
     </table>
 </div>
 
-<? if ($masterof->has($image['matrix']) OR $force->has($image['autor_force_id'])) : ?>
+<?php if ($masterof->has($image['matrix']) OR $force->has($image['autor_force_id'])) : ?>
 <div class="matrix_uploader" id="matrix_image_refileuploader">
     <div id="matrix_image_refileuploader">
         <noscript>
@@ -61,9 +61,9 @@ if ($width > $height) {
     </div>
     <div style="margin-bottom: 10px;">
         <select name="force_id" id="matrix_pictureupload_force_id" onChange="TSC.matrix.initReUpload();">
-            <? foreach ($force as $f) : ?>
+            <?php foreach ($force as $f) : ?>
             <option value="<?= $f ?>"><?= Forces::id2name($f) ?></option>
-            <? endforeach ?>
+            <?php endforeach ?>
         </select>
     </div>
 </div>
@@ -85,4 +85,4 @@ TSC.matrix.initReUpload = function () {
 };
 $(TSC.matrix.initReUpload);
 </script>
-<? endif ?>
+<?php endif ?>

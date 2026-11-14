@@ -31,12 +31,13 @@ class Forces extends Items {
     }
   
     static function forcespicture($force_id) {
-        return Cache::getCachedFetch(
+        $picture = Cache::getCachedFetch(
             "SELECT b.id, b.filename " .
             "FROM forces AS f INNER JOIN bilder AS b ON (b.id = f.picture) " .
             "WHERE f.id = :id " ,
             array('id' => $force_id)
         );
+        return $picture ?: array('id' => null, 'filename' => null);
     }
   
     static function forcesGroup($force_id) {

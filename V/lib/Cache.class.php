@@ -18,7 +18,7 @@ class Cache {
         ksort($parameter);
         $handler = self::getCacheHandler();
         if ($handler === null) {
-            return self::$data[$category][json_encode($parameter)];
+            return self::$data[$category][json_encode($parameter)] ?? null;
         }
         $search = $handler->prepare(
             "SELECT value " .
@@ -30,7 +30,7 @@ class Cache {
         $search->bindValue(':json_parameters', json_encode($parameter));
         $result = $search->execute();
         $result = $result->fetchArray(SQLITE3_ASSOC);
-        return $result['value'];
+        return $result ? $result['value'] : null;
     }
     
     /**
@@ -87,7 +87,7 @@ class Cache {
     static public function getCachedFetch($sql_prepared_statement, $parameter, $expires = 15) {
         $cache_result = self::get(md5($sql_prepared_statement), $parameter);
         if ($cache_result !== null) {
-            return json_decode($cache_result);
+            return json_decode($cache_result, true);
         } else {
             $get_value = DBManager::get()->prepare($sql_prepared_statement);
             $get_value->execute($parameter);
@@ -100,7 +100,7 @@ class Cache {
     static public function getCachedFetchAll($sql_prepared_statement, $parameter = array(), $expires = 15) {
         $cache_result = self::get(md5($sql_prepared_statement), $parameter);
         if ($cache_result !== null) {
-            return json_decode($cache_result);
+            return json_decode($cache_result, true);
         } else {
             $get_value = DBManager::get()->prepare($sql_prepared_statement);
             $get_value->execute($parameter);
@@ -115,8 +115,13 @@ class Cache {
      */
     static protected function getCacheHandler() {
         if (self::$handler === null && class_exists("SQLite3")) {
-            self::$handler = new SQLite3(dirname(__file__)."/../tmp/cache.sqlite");
-            if (!self::checkCacheDB()) {
+            try {
+                self::$handler = new SQLite3(dirname(__file__)."/../tmp/cache.sqlite");
+                if (!self::checkCacheDB()) {
+                    self::$handler = null;
+                }
+            } catch (Exception $e) {
+                //Cache-Datei nicht les-/schreibbar: dann eben nur im Speicher cachen
                 self::$handler = null;
             }
         }

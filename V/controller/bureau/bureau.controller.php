@@ -64,6 +64,7 @@ class bureau extends ModuleGroupController {
      */
     public function action_settings() {
         global $db, $login, $stil, $force;
+        $bilder = array();
         foreach ($force as $f) {
             $bilder[$f] = $db->query("SELECT DISTINCT b.id, b.filename " .
                 "FROM bilder AS b " .
@@ -104,28 +105,30 @@ class bureau extends ModuleGroupController {
      */
     public function action_set() {
         global $db, $login, $salt1, $salt2;
-        if (in_array($_REQUEST['typus'], array("headerfontsize", "fontsize", "font", "headerfont", "notiz", "headercolor", "backgroundimage", "width"))) {
+        $typus = $_REQUEST['typus'] ?? '';
+        $_REQUEST['val'] = $_REQUEST['val'] ?? '';
+        if (in_array($typus, array("headerfontsize", "fontsize", "font", "headerfont", "notiz", "headercolor", "backgroundimage", "width"), true)) {
             $db->query("UPDATE spieler " .
-                       "SET ".$_REQUEST['typus']." = ".$db->quote($_REQUEST['val'])." " .
+                       "SET ".$typus." = ".$db->quote($_REQUEST['val'])." " .
                        "WHERE login = ".$db->quote($login));
         }
-        if ($_REQUEST['typus'] === "password") {
+        if ($typus === "password") {
             $pass = sha1($salt1.$_REQUEST['val'].$salt2);
             $db->query("UPDATE spieler " .
                        "SET password = ".$db->quote($pass)." " .
                        "WHERE login = ".$db->quote($login));
             $_SESSION['pass'] = $pass;
         }
-        if ($_REQUEST['typus'] === "titlealert") {
+        if ($typus === "titlealert") {
             $db->query("UPDATE spieler " .
-                       "SET ".$_REQUEST['typus']." = ".$db->quote($_REQUEST['val'] === "false" ? "0" : "1")." " .
+                       "SET titlealert = ".$db->quote($_REQUEST['val'] === "false" ? "0" : "1")." " .
                        "WHERE login = ".$db->quote($login));
         }
     }
 
     public function action_set_force_picture() {
         global $force;
-        if ($_REQUEST['force_id'] && $force->has($_REQUEST['force_id']) && $_REQUEST['picture_id']) {
+        if (!empty($_REQUEST['force_id']) && $force->has($_REQUEST['force_id']) && !empty($_REQUEST['picture_id'])) {
             $db = DBManager::get();
             $db->exec(
                 "UPDATE forces SET picture = ".$db->quote($_REQUEST['picture_id'])." WHERE id = ".$db->quote($_REQUEST['force_id'])." " .
@@ -177,9 +180,11 @@ class bureau extends ModuleGroupController {
         global $masterof;
         $db = DBManager::get();
         if (!$masterof->has($this->group)) {
-            throw Exception("Unbefugter Zutritt!");
+            throw new Exception("Unbefugter Zutritt!");
         }
         
+        $_REQUEST['macht'] = $_REQUEST['macht'] ?? 0;
+
         //Nachbarn sind die Mitglieder in gemeinsamen Gruppen
         $nachbarn = $db->query(
             "SELECT DISTINCT r2.force_id " .
@@ -226,15 +231,15 @@ class bureau extends ModuleGroupController {
                 "FROM forces AS f INNER JOIN relate_f_gr AS r ON (f.id = r.force_id) " .
                 "WHERE f.name = ".$db->quote($_REQUEST['machtname'])." " .
                     "AND r.gruppe_id = ".$db->quote($this->group))->fetch();
-        if ($result['id']) {
+        if (!empty($result['id'])) {
             throw new Exception("So eine Macht gibt es in der Sternengruppe schon.");
             return;
         }
-        if (strlen($_REQUEST['spieler']) > 40) {
+        if (strlen($_REQUEST['spielername'] ?? '') > 40) {
             throw new Exception("Spielerlogin hat mehr als 40 Zeichen, was zu lang ist.");
             return;
         }
-        if (strlen($_REQUEST['macht']) > 40) {
+        if (strlen($_REQUEST['machtname'] ?? '') > 40) {
             throw new Exception("Name der neuen Macht hat mehr als 40 Zeichen, was zu lang ist.");
             return;
         }
@@ -266,15 +271,11 @@ class bureau extends ModuleGroupController {
                 "FROM forces AS f INNER JOIN relate_f_gr AS r ON (f.id = r.force_id) " .
                 "WHERE f.name = ".$db->quote($_REQUEST['machtname'])." " .
                     "AND r.gruppe_id = ".$db->quote($this->group))->fetch();
-        if ($result['id']) {
+        if (!empty($result['id'])) {
             throw new Exception("So eine Macht gibt es in der Sternengruppe schon.");
             return;
         }
-        if (strlen($_REQUEST['spieler']) > 40) {
-            throw new Exception("Spielerlogin hat mehr als 40 Zeichen, was zu lang ist.");
-            return;
-        }
-        if (strlen($_REQUEST['macht']) > 40) {
+        if (strlen($_REQUEST['machtname'] ?? '') > 40) {
             throw new Exception("Name der neuen Macht hat mehr als 40 Zeichen, was zu lang ist.");
             return;
         }
@@ -298,10 +299,12 @@ class bureau extends ModuleGroupController {
         }
         $db = DBManager::get();
         
-        if ($_REQUEST['contact']) {
-            $result = $db->query("INSERT IGNORE INTO contact (force1, force2) VALUES (".$_REQUEST['macht1'].", ".$_REQUEST['macht2'].")");
+        $macht1 = (int) ($_REQUEST['macht1'] ?? 0);
+        $macht2 = (int) ($_REQUEST['macht2'] ?? 0);
+        if (!empty($_REQUEST['contact'])) {
+            $result = $db->query("INSERT IGNORE INTO contact (force1, force2) VALUES (".$macht1.", ".$macht2.")");
         } else {
-            $result = $db->query("DELETE FROM contact WHERE (force1 = ".$_REQUEST['macht1']." AND force2 = ".$_REQUEST['macht2'].") OR (force1 = ".$_REQUEST['macht2']." AND force2 = ".$_REQUEST['macht1'].")");
+            $result = $db->query("DELETE FROM contact WHERE (force1 = ".$macht1." AND force2 = ".$macht2.") OR (force1 = ".$macht2." AND force2 = ".$macht1.")");
         }
     }
     
@@ -339,7 +342,7 @@ class bureau extends ModuleGroupController {
 
     public function action_set_module_enabled() {
         global $masterof;
-        if ($this->group && $masterof->has($this->group) && $_REQUEST['modules'] && is_array($_REQUEST['modules'])) {
+        if ($this->group && $masterof->has($this->group) && !empty($_REQUEST['modules']) && is_array($_REQUEST['modules'])) {
             $db = DBManager::get();
             if (!in_array("bureau", $_REQUEST['modules'])) {
                 $_REQUEST['modules'][] = "bureau";
@@ -348,6 +351,11 @@ class bureau extends ModuleGroupController {
                 $_REQUEST['modules'][] = "abmelden";
             }
             foreach ($_REQUEST['modules'] as $position => $module) {
+                $type = null;
+                if (!is_string($module) || !preg_match('/^\w+$/', $module)) {
+                    unset($_REQUEST['modules'][$position]);
+                    continue;
+                }
                 if (file_exists(dirname(__file__)."/../".$module)) {
                     $type = 'controller';
                 } elseif (file_exists(dirname(__file__)."/../../plugins/".$module)) {

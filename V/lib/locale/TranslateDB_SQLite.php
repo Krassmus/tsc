@@ -72,7 +72,7 @@ class TranslateDB_sqlite implements TranslateDB {
         $statement->bindValue(":string", $string);
         $result = $statement->execute();
         $result = $result->fetchArray(SQLITE3_NUM);
-        return $result[0];
+        return $result ? $result[0] : null;
     }
     
     public function add($language_id, $text, $translation, $origin) {
@@ -111,10 +111,9 @@ class TranslateDB_sqlite implements TranslateDB {
                 "AND string = :string " .
         "");
         $statement->bindValue(":language_id", $language_id);
-        $statement->bindValue(":string", $string);
+        $statement->bindValue(":string", $text);
         $result = $statement->execute();
         return $result->fetchArray(SQLITE3_ASSOC);
-        return $result[0];
     }
     
     protected function checkDB() {

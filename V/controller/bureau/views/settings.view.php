@@ -25,11 +25,11 @@
                 <option value="-1">
                     standard
                 </option>
-                <? foreach ($allebilder as $bild) : ?>
+                <?php foreach ($allebilder as $bild) : ?>
                 <option value="<?= $bild['id']?>"<?= (($bild['id'] == $stil['backgroundimage']) ? " selected" : "") ?>>
                     <?= escape($bild['filename']) ?>
                 </option>
-                <? endforeach ?>
+                <?php endforeach ?>
             </select>
         </td>
     </tr>
@@ -55,33 +55,33 @@
 </table>
 </form>
 
-<? if (count($plugin_settings)) : ?>
+<?php if (count($plugin_settings)) : ?>
 <h2>Moduleinstellungen</h2>
 <table>
     <tbody>
-    <? foreach ($plugin_settings as $setting) : ?>
+    <?php foreach ($plugin_settings as $setting) : ?>
         <tr>
             <td><?= escape($setting[0]) ?></td>
             <td><?= $setting[1] ?></td>
         </tr>
-    <? endforeach ?>
+    <?php endforeach ?>
     </tbody>
 </table>
-<? endif ?>
+<?php endif ?>
 
 <h2>Zeichen der Macht</h2>
 <form name="setPictures">
 <table>
-<? foreach ($bilder as $force => $forcepics) : ?>
+<?php foreach ($bilder as $force => $forcepics) : ?>
 <tr>
     <td><?= Forces::id2name($force) ?></td>
-	<? $bild = Forces::forcespicture($force) ?>
+	<?php $bild = Forces::forcespicture($force) ?>
     <td>
         <select name="force_<?= $force ?>_pic" onChange="TSC.bureau.setForcePicture('<?= $force ?>', this.value);">
             <option value="-1">Kein Bild</option>
-            <? foreach ($forcepics as $pic) : ?>
-            <option value="<?= $pic['id'] ?>" <?= $pic['id'] === $bild['id'] ? " selected" : "" ?>><?= $pic['filename'] ?></option>
-            <? endforeach ?>
+            <?php foreach ($forcepics as $pic) : ?>
+            <option value="<?= $pic['id'] ?>" <?= $pic['id'] == $bild['id'] ? " selected" : "" ?>><?= $pic['filename'] ?></option>
+            <?php endforeach ?>
         </select>
     </td>
 	<td>
@@ -90,7 +90,7 @@
 		</div>
 	</td>
 </tr>
-<? endforeach ?>
+<?php endforeach ?>
 </table>
 </form>
 

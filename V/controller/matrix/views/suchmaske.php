@@ -21,9 +21,9 @@
 
     <table id="matrix_suchmaske_buchstaben" style="width: 100%;" class="fine_table">
         <tr>
-            <? foreach (array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#") as $buchstabe) : ?>
+            <?php foreach (array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#") as $buchstabe) : ?>
             <td class="lightable"><?= $buchstabe ?></td>
-            <? endforeach ?>
+            <?php endforeach ?>
         </tr>
     </table>
     <script>
@@ -39,29 +39,29 @@
     <div id="matrix_suchmaske_sidebox">
     Letzte Änderungen:
     <ul>
-    <? foreach ($lastChanges as $key => $artikel) : ?>
+    <?php foreach ($lastChanges as $key => $artikel) : ?>
         <li>
             <a onClick="TSC.matrix.openArticle('<?= $matrix ?>', '<?= str_replace("'", '%HOCHKOMMA%', escape($artikel)) ?>');">
                 <?= $artikel ?>
             </a>
         </li>
-    <? endforeach ?>
+    <?php endforeach ?>
     </ul>
     </div>
 
     <div id="matrix_suchmaske_results">
-    <? if ($results) : ?>
+    <?php if ($results) : ?>
         Suchergebnisse:
         <ul>
-        <? foreach ($results as $artikel) : ?>
+        <?php foreach ($results as $artikel) : ?>
             <li>
                 <a onClick="TSC.matrix.openArticle('<?= $matrix ?>', '<?= str_replace("'", '%HOCHKOMMA%', escape($artikel)) ?>');">
                     <?= escape($artikel) ?>
                 </a>
             </li>
-        <? endforeach ?>
+        <?php endforeach ?>
         </ul>
-    <? endif ?>
+    <?php endif ?>
     </div>
 </div>
 

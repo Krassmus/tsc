@@ -18,10 +18,10 @@ class Localization {
     static protected $replacements = array();
     
     static public function translate($text, $language_id = null) {
-        $language_id or $language_id = $GLOBALS['user_language'];
+        $language_id or $language_id = $GLOBALS['user_language'] ?? 'de';
         $translation = I18nConnector::get()->translate($language_id, $text);
         $translation or $translation = $text;
-        $replacements = (array) self::$replacements[$language_id];
+        $replacements = (array) (self::$replacements[$language_id] ?? array());
         return str_replace(array_keys($replacements), $replacements, $translation);
     }
     

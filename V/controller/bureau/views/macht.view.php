@@ -1,4 +1,4 @@
-<? //Bild der Macht ?>
+<?php //Bild der Macht ?>
 <div style="text-align: center; width: 100%;">
     <input type="button" value="up" onClick="TSC.bureau.adminUebersicht('<?= $gruppe ?>');">
 </div>

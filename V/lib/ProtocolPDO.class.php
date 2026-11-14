@@ -12,9 +12,8 @@
 class ProtocolPDO extends PDO {
     static protected $protocol = array();
 
-    public function query($statement) {
-        
-        return parent::query($statement);
+    public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false {
+        return parent::query($query, $fetchMode, ...$fetchModeArgs);
     }
 }
 

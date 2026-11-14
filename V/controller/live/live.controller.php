@@ -121,11 +121,12 @@ class live extends ModuleController {
 
     public function action_change_as_online() {
         global $force, $login;
-        if ($force->has($_REQUEST['new_force']) OR !$_REQUEST['new_force']) {
+        $new_force = $_REQUEST['new_force'] ?? '';
+        if ($new_force === '' || $force->has($new_force)) {
             $db = DBManager::get();
             $db->exec(
                 "UPDATE spieler " .
-                "SET online_as = ".$db->quote($_REQUEST['new_force'])." " .
+                "SET online_as = ".($new_force === '' ? "NULL" : $db->quote($new_force))." " .
                 "WHERE login = ".$db->quote($login)." " .
             "");
         }
@@ -133,7 +134,7 @@ class live extends ModuleController {
 
     public function action_send_message() {
         global $force, $login;
-        if ($_REQUEST['message'] && $force->has($_REQUEST['fromforce'])) {
+        if (!empty($_REQUEST['message']) && $force->has($_REQUEST['fromforce'] ?? null)) {
             $db = DBManager::get();
             $is_contact = $db->query(
                 "SELECT force1 FROM contact WHERE " .
