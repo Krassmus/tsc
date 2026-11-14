@@ -522,11 +522,26 @@ class Text {
                 ($title ? "AND name != ".$db->quote($title)." " : "") .
             "ORDER BY CHAR_LENGTH(name) DESC " .
         "")->fetchAll();
-        foreach($result as $row) {
-            $text = str_replace(" ".self::escape($row['name']), //wegen der Umlaute
-                              ' <a onClick="TSC.matrix.openArticle('."'".$row['gruppe']."', '" .str_replace("'", '%HOCHKOMMA%', self::escape(str_replace(" ", "%20", $row['name'])))."'".');">'.str_replace(" ", "&nbsp;", self::escape($row['name'])).'</a>',
-                              $text);
+        //Daten von Plugins ([stargroup]...) und Scripte duerfen keine Links bekommen,
+        //sonst wird z.B. die JSON-Liste der Sternensysteme zerstoert.
+        $parts = preg_split(
+            '/(\[(?:stargroup|starsystem)[^\]]*\].*?\[\/(?:stargroup|starsystem)\]|<script.*?<\/script>)/s',
+            $text,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE
+        );
+        foreach ($parts as $index => $part) {
+            if ($index % 2 === 1) {
+                continue; //geschuetzter Bereich
+            }
+            foreach($result as $row) {
+                $part = str_replace(" ".self::escape($row['name']), //wegen der Umlaute
+                                  ' <a onClick="TSC.matrix.openArticle('."'".$row['gruppe']."', '" .str_replace("'", '%HOCHKOMMA%', self::escape(str_replace(" ", "%20", $row['name'])))."'".');">'.str_replace(" ", "&nbsp;", self::escape($row['name'])).'</a>',
+                                  $part);
+            }
+            $parts[$index] = $part;
         }
+        $text = implode("", $parts);
         if (self::$depth === 1) {
             //Hier müssen die erzwungenen Spaces noch aus den Linkparametern. 
             //Das darf aber nicht geschehen, wenn wir noch mindestens eine Ebene tiefer
