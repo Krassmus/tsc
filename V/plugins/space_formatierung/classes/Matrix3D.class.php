@@ -50,7 +50,7 @@ class Matrix3D {
         $middle = array('x' => 0, 'y' => 0, 'z' => 0);
         foreach ($systems as $key => $system) {
             isset($system['color']) OR ($system['color'] = "ffffaa");
-            isset($system['size']) OR ($system['size'] = "5");
+            isset($system['size']) OR ($system['size'] = 5);
 
             isset($system['x']) OR ($system['x'] = 0);
             isset($system['y']) OR ($system['y'] = 0);
