@@ -73,12 +73,12 @@ class live extends ModuleController {
         //Kontakte online:
         $output['contacts'] = array();
         if ($online_as) {
-            $contacts = $db->query("SELECT DISTINCT of.* " .
-                "FROM forces AS of " .
+            $contacts = $db->query("SELECT DISTINCT oforce.* " .
+                "FROM forces AS oforce " .
                     "JOIN contact AS c " .
-                    "INNER JOIN forces AS f ON ((c.force1 = f.id AND c.force2 = of.id) OR (c.force2 = f.id AND c.force1 = of.id)) " .
+                    "INNER JOIN forces AS f ON ((c.force1 = f.id AND c.force2 = oforce.id) OR (c.force2 = f.id AND c.force1 = oforce.id)) " .
                 "WHERE f.id = ".$db->quote($online_as)." " .
-                    "AND UNIX_TIMESTAMP() - of.lastsignoflife <= 61")->fetchAll();
+                    "AND UNIX_TIMESTAMP() - oforce.lastsignoflife <= 61")->fetchAll();
             foreach ($contacts as $key => $contact) {
                 $view = Template::summon(dirname(__file__)."/views/single_contact.view.php")
                     ->with('contact', $contact)
