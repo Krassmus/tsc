@@ -7,11 +7,19 @@
 class Matrix3D {
 
     static public function special_format_stargroup($text) {
-        $text = preg_replace('/\[stargroup([^\]]*)\]([^~]*)\[\/stargroup\]/e', "Matrix3D::createStargroup('\\2', '\\1')", $text);
+        $text = preg_replace_callback(
+            '/\[stargroup([^\]]*)\]([^~]*)\[\/stargroup\]/',
+            function ($match) {
+                return Matrix3D::createStargroup($match[2], $match[1]);
+            },
+            $text
+        );
         return $text;
     }
 
     static public function createStargroup($json, $options) {
+        $zoom = null;
+        $width = null;
         $options = explode(":", $options);
         if (is_array($options)) {
             foreach ($options as $option) {
@@ -63,7 +71,7 @@ class Matrix3D {
         ($middle['z'] > $mindiff OR $middle['z'] < -$mindiff) OR ($middle['z'] = 0);
 
         $maximum = 10;
-        foreach ($systems as $system) {
+        foreach ($new_systems as $system) {
             if ($maximum < abs($system['x'] - $middle['x'])) {
                 $maximum = abs($system['x'] - $middle['x']);
             }
@@ -88,11 +96,19 @@ class Matrix3D {
 
 
     static public function special_format_starsystem($text) {
-        $text = preg_replace('/\[starsystem([^\]]*)\]([^~]*)\[\/starsystem\]/e', "Matrix3D::createStarsystem('\\2', '\\1')", $text);
+        $text = preg_replace_callback(
+            '/\[starsystem([^\]]*)\]([^~]*)\[\/starsystem\]/',
+            function ($match) {
+                return Matrix3D::createStarsystem($match[2], $match[1]);
+            },
+            $text
+        );
         return $text;
     }
 
     static public function createStarsystem($json, $options) {
+        $zoom = null;
+        $width = null;
         $options = explode(":", $options);
         if (is_array($options)) {
             foreach ($options as $option) {
@@ -144,7 +160,7 @@ class Matrix3D {
         ($middle['z'] > $mindiff OR $middle['z'] < -$mindiff) OR ($middle['z'] = 0);
 
         $maximum = 10;
-        foreach ($systems as $system) {
+        foreach ($new_systems as $system) {
             if ($maximum < abs($system['x'] - $middle['x'])) {
                 $maximum = abs($system['x'] - $middle['x']);
             }

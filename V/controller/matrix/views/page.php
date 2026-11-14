@@ -22,8 +22,9 @@
                 $norm = 250;
                 $bild = new MatrixImage(Text::getpic($artikel['bild'], $matrix));
             $image = $bild->getSize();
-                $width = $image['width'] ? $image['width'] : $norm;
-            $height = $image['height'] ? $image['height'] : $norm;
+            $image = $image[0] ?? array();
+            $width = !empty($image['width']) ? $image['width'] : $norm;
+            $height = !empty($image['height']) ? $image['height'] : $norm;
             if ($width > $height) {
                 if ($height > $norm) {
                     $width = floor($width * $norm / $height);

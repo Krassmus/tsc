@@ -18,6 +18,8 @@ class Matrix3D {
     }
 
     static public function createStargroup($json, $options) {
+        $zoom = null;
+        $width = null;
         $options = explode(":", $options);
         if (is_array($options)) {
             foreach ($options as $option) {
@@ -69,7 +71,7 @@ class Matrix3D {
         ($middle['z'] > $mindiff OR $middle['z'] < -$mindiff) OR ($middle['z'] = 0);
 
         $maximum = 10;
-        foreach ($systems as $system) {
+        foreach ($new_systems as $system) {
             if ($maximum < abs($system['x'] - $middle['x'])) {
                 $maximum = abs($system['x'] - $middle['x']);
             }
